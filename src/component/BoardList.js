@@ -1,22 +1,64 @@
-import { useEffect, useState } from "react"; 
-import { Link } from "react-router-dom";
+import {useEffect, useState} from "react";
+import {Link} from "react-router-dom";
 import {boardsDomain} from "./common";
 
 export default function StudentsList() {
-    const [boards, setBoards] = useState([]); 
- 
-     useEffect( ()=>  {  
-        //  `${dataDomain}/boards` 로 비동기 요청  
-         fetch(`${boardsDomain}`)  // JSON-Server 에게 students data 요청
-             .then(res => {
-                 return res.json();
-             })
-             .then(data => {
-                     console.log(data);
-                     setBoards(data.postsResponse);
-                 }
-             );
-    }, []) ;  // 처음 한번만 실행 됨    
+    const [boards, setBoards] = useState([]);
+    const [paging, setPaging] = useState({
+        totalPages: 0,
+        totalElements: 0,
+        pageNumber: 0,
+        pageSize: 0
+    });
+    const [currentPage, setCurrentPage] = useState(0);
+
+    useEffect(() => {
+        //  `${dataDomain}/boards` 로 비동기 요청
+        fetch(`${boardsDomain}`)  // JSON-Server 에게 students data 요청
+            .then(res => {
+                return res.json();
+            })
+            .then(data => {
+                    console.log(data);
+                    setBoards(data.postsResponse);
+                    setPaging((prevState) => {
+                        return {...prevState,
+                            totalPages: data.totalPages,
+                            totalElements: data.totalElements,
+                            pageNumber: data.pageNumber,
+                            pageSize: data.pageSize
+                        }
+                    });
+                }
+            );
+    }, []);  // 처음 한번만 실행 됨
+
+    const pageNumbers = [];
+    for (let i = 0; i < paging.totalPages; i++) {
+        pageNumbers.push(i);
+    }
+
+    function getBoardsByPaging(pageNumber) {
+        setCurrentPage(pageNumber);
+
+        fetch(`${boardsDomain}?page=${pageNumber}&size=5`)  // JSON-Server 에게 students data 요청
+            .then(res => {
+                return res.json();
+            })
+            .then(data => {
+                    console.log(data);
+                    setBoards(data.postsResponse);
+                    setPaging((prevState) => {
+                        return {...prevState,
+                            totalPages: data.totalPages,
+                            totalElements: data.totalElements,
+                            pageNumber: data.pageNumber,
+                            pageSize: data.pageSize
+                        }
+                    });
+                }
+            );
+    }
 
     return (
         <div className="container" style={{maxWidth: '1000px'}}>
@@ -27,7 +69,7 @@ export default function StudentsList() {
             <div className="row">
                 <div className="col">
                     <button className="btn btn-primary float-end">
-                        <Link to="/boards/create"  style={{textDecoration: "none", color: "white"}}>
+                        <Link to="/boards/create" style={{textDecoration: "none", color: "white"}}>
                             글 등록
                         </Link>
                     </button>
@@ -62,6 +104,38 @@ export default function StudentsList() {
                     }
                     </tbody>
                 </table>
+            </div>
+
+            <div>
+                <nav aria-label="Page navigation example">
+                    <ul className="pagination justify-content-center">
+                        <li className="page-item">
+                            <button className="page-link" aria-label="Previous">
+                                <span aria-hidden="true">
+                                    &laquo;
+                                </span>
+                            </button>
+                        </li>
+
+                        {
+                            pageNumbers.map((number) => (
+                                <li className={`page-item ${number === currentPage ? 'active' : ''}`} key={number}>
+                                    <button className="page-link" onClick={() => getBoardsByPaging(number)}>
+                                        {number + 1}
+                                    </button>
+                                </li>
+                            ))
+                        }
+
+                        <li className="page-item">
+                            <button className="page-link" aria-label="Next">
+                                <span aria-hidden="true">
+                                    &raquo;
+                                </span>
+                            </button>
+                        </li>
+                    </ul>
+                </nav>
             </div>
         </div>
     );
