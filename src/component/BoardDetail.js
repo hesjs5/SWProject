@@ -43,16 +43,17 @@ export default function BoardDetail( ) {
                         <span className="me-4" id="memberName">{board.title}</span>
                         <small className="text-muted" id="createDate">Create {board.createDate}</small>
                         <small className="text-muted" id="modifyDate">Modify {board.modifyDate}</small>
-                        <div className="float-end">
-                            <button className="btn btn-warning btn-sm" type="button">수정</button>
-                            <button className="btn btn-danger btn-sm" type="button">삭제</button>
-                        </div>
                     </div>
 
                     <hr/>
 
                     <div>
                         <p id="content">{board.content}</p>
+                    </div>
+
+                    <div className="d-grid gap-2">
+                        <button className="btn btn-warning btn-sm" type="button">수정</button>
+                        <button className="btn btn-danger btn-sm" type="button">삭제</button>
                     </div>
 
                     <hr/>
