@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {boardsDomain} from "./common";
 
 export default function StudentsList() {
@@ -60,6 +60,11 @@ export default function StudentsList() {
             );
     }
 
+    const navigate = useNavigate();
+    function goBoardCreate() {
+        navigate("/boards/create");
+    }
+
     return (
         <div className="container" style={{maxWidth: '1000px'}}>
             <div className="py-5 text-center">
@@ -68,10 +73,8 @@ export default function StudentsList() {
 
             <div className="row">
                 <div className="col">
-                    <button className="btn btn-primary float-end">
-                        <Link to="/boards/create" style={{textDecoration: "none", color: "white"}}>
-                            글 등록
-                        </Link>
+                    <button className="btn btn-primary float-end" onClick={goBoardCreate}>
+                        글 등록
                     </button>
                 </div>
             </div>
