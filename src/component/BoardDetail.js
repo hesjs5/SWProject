@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";  
-import {Link, useParams} from "react-router-dom";
-import {boardsDomain, dataDomain} from "./common";
+import {useEffect, useState} from "react";
+import {useParams} from "react-router-dom";
+import {boardsDomain} from "./common";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function BoardDetail( ) {
@@ -13,6 +13,17 @@ export default function BoardDetail( ) {
     });
 
     const [replies, setReplies] = useState([]);
+    const [paging, setPaging] = useState({
+        totalPages: 0,
+        totalElements: 0,
+        pageNumber: 0,
+        pageSize: 0
+    });
+    const [currentPage, setCurrentPage] = useState(0);
+    const pageNumbers = [];
+    for (let i = 0; i < paging.totalPages; i++) {
+        pageNumbers.push(i);
+    }
 
     const {id} = useParams();
 
@@ -28,16 +39,46 @@ export default function BoardDetail( ) {
             });
     }, [id]);   // id가 바뀌면 실행
 
-    // useEffect(() => {
-    //     fetch(`${boardsDomain}/${id}/replies`)
-    //         .then(res => {
-    //             return res.json();
-    //         })
-    //         .then(data => {
-    //             console.log(data);
-    //             setReplies(data);
-    //         })
-    // }, [id]);
+    useEffect(() => {
+        fetch(`${boardsDomain}/${id}/replies`)
+            .then(res => {
+                return res.json();
+            })
+            .then(data => {
+                console.log(data);
+                setReplies(data.repliesResponse);
+                setPaging((prevState) => {
+                    return {...prevState,
+                        totalPages: data.totalPages,
+                        totalElements: data.totalElements,
+                        pageNumber: data.pageNumber,
+                        pageSize: data.pageSize
+                    }
+                });
+            })
+    }, [id]);
+
+    function getRepliesByPaging(pageNumber) {
+        setCurrentPage(pageNumber);
+
+        fetch(`${boardsDomain}/${id}/replies?page=${pageNumber}&size=10`)  // JSON-Server 에게 students data 요청
+            .then(res => {
+                return res.json();
+            })
+            .then(data => {
+                    console.log(data);
+                    setReplies(data.repliesResponse);
+                    setPaging((prevState) => {
+                        return {...prevState,
+                            totalPages: data.totalPages,
+                            totalElements: data.totalElements,
+                            pageNumber: data.pageNumber,
+                            pageSize: data.pageSize
+                        }
+                    });
+                }
+            );
+    }
 
     function goLogin() {
         console.log("goLogin");
@@ -99,23 +140,39 @@ export default function BoardDetail( ) {
                                     )
                                 }
                             </div>
-                            <nav aria-label="Page navigation example">
-                                <ul className="pagination pagination-sm justify-content-center">
-                                    <li className="page-item">
-                                        <a className="page-link" href="#" aria-label="Previous">
-                                            <span aria-hidden="true">&laquo;</span>
-                                        </a>
-                                    </li>
-                                    <li className="page-item"><a className="page-link" href="#">1</a></li>
-                                    <li className="page-item"><a className="page-link" href="#">2</a></li>
-                                    <li className="page-item"><a className="page-link" href="#">3</a></li>
-                                    <li className="page-item">
-                                        <a className="page-link" href="#" aria-label="Next">
-                                            <span aria-hidden="true">&raquo;</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </nav>
+                            <div>
+                                <nav aria-label="Page navigation example">
+                                    <ul className="pagination justify-content-center">
+                                        <li className="page-item">
+                                            <button className="page-link" aria-label="Previous">
+                                                <span aria-hidden="true">
+                                                    &laquo;
+                                                </span>
+                                            </button>
+                                        </li>
+
+                                        {
+                                            pageNumbers.map((number) => (
+                                                <li className={`page-item ${number === currentPage ? 'active' : ''}`}
+                                                    key={number}>
+                                                    <button className="page-link"
+                                                            onClick={() => getRepliesByPaging(number)}>
+                                                        {number + 1}
+                                                    </button>
+                                                </li>
+                                            ))
+                                        }
+
+                                        <li className="page-item">
+                                            <button className="page-link" aria-label="Next">
+                                                <span aria-hidden="true">
+                                                    &raquo;
+                                                </span>
+                                            </button>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
 
                             <div>
                                 <label htmlFor="createReply">댓글 쓰기</label>
