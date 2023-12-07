@@ -44,7 +44,7 @@ export default function ReplyList() {
                     }
                 });
             });
-    }, [id, searchParams, setSearchParams]);
+    }, [id]);
 
     function getRepliesByPaging(pageNumber) {
         searchParams.set("page", String(pageNumber));

@@ -5,6 +5,7 @@ import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import BoardCreate from "./component/boards/BoardCreate";
 import {createContext} from "react";
 import BoardEdit from "./component/boards/BoardEdit";
+import Header from "./component/layout/Header";
 
 export const LoginContext = createContext({
     token: '',
@@ -22,6 +23,7 @@ function App() {
     return (
         <div className="App">
             <LoginContext.Provider value={contextValue}>
+                <Header />
                 <BrowserRouter>
                     <Routes>
 

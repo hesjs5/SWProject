@@ -44,7 +44,7 @@ export default function BoardList() {
                     });
                 }
             );
-    }, [searchParams, setSearchParams]);  // 처음 한번만 실행 됨
+    }, []);  // 처음 한번만 실행 됨
 
     function getBoardsByPaging(pageNumber) {
         searchParams.set("page", String(pageNumber));
@@ -80,10 +80,6 @@ export default function BoardList() {
 
     return (
         <div className="container" style={{maxWidth: '1000px'}}>
-            <div className="py-5 text-center">
-                <h2>글 목록</h2>
-            </div>
-
             <div className="row">
                 <div className="col">
                     <button className="btn btn-primary float-end" onClick={goBoardCreate}>

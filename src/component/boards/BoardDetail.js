@@ -62,10 +62,6 @@ export default function BoardDetail( ) {
 
     return (
         <div className="container" style={{maxWidth: '560px'}}>
-            <div className="py-5 text-center">
-                <h2>글 상세</h2>
-            </div>
-
             <div className="card border-0">
                 <div className="card-body">
                     <div className="card-title mb-3">
