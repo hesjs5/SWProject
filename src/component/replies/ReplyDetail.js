@@ -2,10 +2,10 @@ import {useContext, useState} from "react";
 import {useParams} from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {LoginContext} from "../../App";
-import BoardDelete from "../boards/BoardDelete";
 import {boardsURL} from "../../common/URL";
 import {PUT} from "../../common/HttpMethod";
 import {APPLICATION_JSON} from "../../common/HttpHeaders";
+import ReplyDelete from "./ReplyDelete";
 
 export default function ReplyDetail(props) {
     const {id} = useParams();
@@ -69,7 +69,7 @@ export default function ReplyDetail(props) {
             return (
                 <div className="d-grid gap-2">
                     <button className="btn btn-warning btn-sm" type="button" onClick={update}>수정</button>
-                    <BoardDelete/>
+                    <ReplyDelete replyId={reply.id}/>
                 </div>
             );
         }
