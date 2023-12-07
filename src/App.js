@@ -4,6 +4,7 @@ import './App.css';
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import BoardCreate from "./component/BoardCreate";
 import {createContext} from "react";
+import BoardEdit from "./component/BoardEdit";
 
 export const LoginContext = createContext({
     token: '',
@@ -13,6 +14,7 @@ export const LoginContext = createContext({
 const contextValue = {
     token: '',
     isLoggedIn: false,
+    memberName: '',
 };
 
 function App() {
@@ -26,6 +28,7 @@ function App() {
                         <Route path="/boards" element={<BoardList/>}> </Route>
                         <Route path="/boards/:id" element={<BoardDetail/>}> </Route>
                         <Route path="/boards/create" element={<BoardCreate/>}> </Route>
+                        <Route path="/boards/:id/edit" element={<BoardEdit/>}> </Route>
 
                     </Routes>
                 </BrowserRouter>
