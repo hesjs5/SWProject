@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import {boardsURL} from "../../common/URL";
 
-export default function StudentsList() {
+export default function BoardList() {
     const [boards, setBoards] = useState([]);
     const [paging, setPaging] = useState({
         totalPages: 0,
