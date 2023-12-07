@@ -46,7 +46,7 @@ export default function ReplyCreate() {
         if (isNotLoggedIn()) {
             return (
                 <div>
-                    <textarea className="form-control" rows="3" defaultValue="댓글을 작성하려면 로그인 해주세요" disabled
+                    <textarea className="form-control" rows="3" id="replyContent" defaultValue="댓글을 작성하려면 로그인 해주세요" disabled
                               onClick={goLogin}/>
                 </div>
             );
