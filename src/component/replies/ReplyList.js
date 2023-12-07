@@ -1,10 +1,12 @@
 import {useEffect, useState} from "react";
-import {useParams} from "react-router-dom";
+import {useParams, useSearchParams} from "react-router-dom";
 import ReplyCreate from "./ReplyCreate";
 import {boardsURL} from "../../common/URL";
 import ReplyDetail from "./ReplyDetail";
+import Pagination from "react-js-pagination";
 
 export default function ReplyList() {
+    const [searchParams, setSearchParams] = useSearchParams();
 
     const {id} = useParams();
     const [replies, setReplies] = useState([]);
@@ -14,14 +16,18 @@ export default function ReplyList() {
         pageNumber: 0,
         pageSize: 0
     });
-    const [currentPage, setCurrentPage] = useState(0);
-    const pageNumbers = [];
-    for (let i = 0; i < paging.totalPages; i++) {
-        pageNumbers.push(i);
-    }
 
     useEffect(() => {
-        fetch(`${boardsURL}/${id}/replies`)
+        if (searchParams.get("page") === null) {
+            searchParams.set("page", "1");
+            setSearchParams(searchParams);
+        }
+        if (searchParams.get("size") === null) {
+            searchParams.set("size", "10");
+            setSearchParams(searchParams);
+        }
+
+        fetch(`${boardsURL}/${id}/replies?page=${searchParams.get("page") - 1}&size=${searchParams.get("size")}`)
             .then(res => {
                 return res.json();
             })
@@ -29,20 +35,25 @@ export default function ReplyList() {
                 console.log(data);
                 setReplies(data.repliesResponse);
                 setPaging((prevState) => {
-                    return {...prevState,
+                    return {
+                        ...prevState,
                         totalPages: data.totalPages,
                         totalElements: data.totalElements,
                         pageNumber: data.pageNumber,
                         pageSize: data.pageSize
                     }
                 });
-            })
-    }, [id]);
+            });
+    }, [id, searchParams, setSearchParams]);
 
     function getRepliesByPaging(pageNumber) {
-        setCurrentPage(pageNumber);
+        searchParams.set("page", String(pageNumber));
+        setSearchParams(searchParams);
 
-        fetch(`${boardsURL}/${id}/replies?page=${pageNumber}&size=10`)  // JSON-Server 에게 students data 요청
+        searchParams.set("size", "10");
+        setSearchParams(searchParams);
+
+        fetch(`${boardsURL}/${id}/replies?page=${searchParams.get("page") - 1}&size=${searchParams.get("size")}`)  // JSON-Server 에게 students data 요청
             .then(res => {
                 return res.json();
             })
@@ -50,7 +61,8 @@ export default function ReplyList() {
                     console.log(data);
                     setReplies(data.repliesResponse);
                     setPaging((prevState) => {
-                        return {...prevState,
+                        return {
+                            ...prevState,
                             totalPages: data.totalPages,
                             totalElements: data.totalElements,
                             pageNumber: data.pageNumber,
@@ -77,39 +89,16 @@ export default function ReplyList() {
                         )
                     }
                 </div>
-                <div>
-                    <nav aria-label="Page navigation example">
-                        <ul className="pagination justify-content-center">
-                            <li className="page-item">
-                                <button className="page-link" aria-label="Previous">
-                                                <span aria-hidden="true">
-                                                    &laquo;
-                                                </span>
-                                </button>
-                            </li>
 
-                            {
-                                pageNumbers.map((number) => (
-                                    <li className={`page-item ${number === currentPage ? 'active' : ''}`}
-                                        key={number}>
-                                        <button className="page-link"
-                                                onClick={() => getRepliesByPaging(number)}>
-                                            {number + 1}
-                                        </button>
-                                    </li>
-                                ))
-                            }
-
-                            <li className="page-item">
-                                <button className="page-link" aria-label="Next">
-                                                <span aria-hidden="true">
-                                                    &raquo;
-                                                </span>
-                                </button>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
+                <Pagination
+                    activePage={parseInt(searchParams.get("page"))}
+                    itemsCountPerPage={parseInt(searchParams.get("size"))}
+                    totalItemsCount={paging.totalElements}
+                    pageRangeDisplayed={10}
+                    prevPageText={"‹"}
+                    nextPageText={"›"}
+                    onChange={getRepliesByPaging}
+                />
 
                 <ReplyCreate/>
             </div>
