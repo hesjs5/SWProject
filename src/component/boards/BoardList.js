@@ -1,8 +1,12 @@
 import {useEffect, useState} from "react";
-import {Link, useNavigate} from "react-router-dom";
+import {Link, useNavigate, useSearchParams} from "react-router-dom";
 import {boardsURL} from "../../common/URL";
+import Pagination from "react-js-pagination";
+import '../../css/Paging.css';
 
 export default function BoardList() {
+    const [searchParams, setSearchParams] = useSearchParams();
+
     const [boards, setBoards] = useState([]);
     const [paging, setPaging] = useState({
         totalPages: 0,
@@ -10,11 +14,19 @@ export default function BoardList() {
         pageNumber: 0,
         pageSize: 0
     });
-    const [currentPage, setCurrentPage] = useState(0);
 
     useEffect(() => {
+        if (searchParams.get("page") === null) {
+            searchParams.set("page", "1");
+            setSearchParams(searchParams);
+        }
+        if (searchParams.get("size") === null) {
+            searchParams.set("size", "10");
+            setSearchParams(searchParams);
+        }
+
         //  `${dataDomain}/boards` 로 비동기 요청
-        fetch(`${boardsURL}`)  // JSON-Server 에게 students data 요청
+        fetch(`${boardsURL}?page=${searchParams.get("page") - 1}&size=${searchParams.get("size")}`)  // JSON-Server 에게 students data 요청
             .then(res => {
                 return res.json();
             })
@@ -22,7 +34,8 @@ export default function BoardList() {
                     console.log(data);
                     setBoards(data.postsResponse);
                     setPaging((prevState) => {
-                        return {...prevState,
+                        return {
+                            ...prevState,
                             totalPages: data.totalPages,
                             totalElements: data.totalElements,
                             pageNumber: data.pageNumber,
@@ -31,17 +44,16 @@ export default function BoardList() {
                     });
                 }
             );
-    }, []);  // 처음 한번만 실행 됨
-
-    const pageNumbers = [];
-    for (let i = 0; i < paging.totalPages; i++) {
-        pageNumbers.push(i);
-    }
+    }, [searchParams, setSearchParams]);  // 처음 한번만 실행 됨
 
     function getBoardsByPaging(pageNumber) {
-        setCurrentPage(pageNumber);
+        searchParams.set("page", String(pageNumber));
+        setSearchParams(searchParams);
 
-        fetch(`${boardsURL}?page=${pageNumber}`)  // JSON-Server 에게 students data 요청
+        searchParams.set("size", "10");
+        setSearchParams(searchParams);
+
+        fetch(`${boardsURL}?page=${searchParams.get("page") - 1}&size=${searchParams.get("size")}`)  // JSON-Server 에게 students data 요청
             .then(res => {
                 return res.json();
             })
@@ -49,7 +61,8 @@ export default function BoardList() {
                     console.log(data);
                     setBoards(data.postsResponse);
                     setPaging((prevState) => {
-                        return {...prevState,
+                        return {
+                            ...prevState,
                             totalPages: data.totalPages,
                             totalElements: data.totalElements,
                             pageNumber: data.pageNumber,
@@ -109,37 +122,15 @@ export default function BoardList() {
                 </table>
             </div>
 
-            <div>
-                <nav aria-label="Page navigation example">
-                    <ul className="pagination justify-content-center">
-                        <li className="page-item">
-                            <button className="page-link" aria-label="Previous">
-                                <span aria-hidden="true">
-                                    &laquo;
-                                </span>
-                            </button>
-                        </li>
-
-                        {
-                            pageNumbers.map((number) => (
-                                <li className={`page-item ${number === currentPage ? 'active' : ''}`} key={number}>
-                                    <button className="page-link" onClick={() => getBoardsByPaging(number)}>
-                                        {number + 1}
-                                    </button>
-                                </li>
-                            ))
-                        }
-
-                        <li className="page-item">
-                            <button className="page-link" aria-label="Next">
-                                <span aria-hidden="true">
-                                    &raquo;
-                                </span>
-                            </button>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
+            <Pagination
+                activePage={parseInt(searchParams.get("page"))}
+                itemsCountPerPage={parseInt(searchParams.get("size"))}
+                totalItemsCount={paging.totalElements}
+                pageRangeDisplayed={10}
+                prevPageText={"‹"}
+                nextPageText={"›"}
+                onChange={getBoardsByPaging}
+            />
         </div>
     );
 }
