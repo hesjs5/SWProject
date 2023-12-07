@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
-import {boardsDomain} from "./common";
+import {boardsURL} from "../../common/URL";
 
 export default function StudentsList() {
     const [boards, setBoards] = useState([]);
@@ -14,7 +14,7 @@ export default function StudentsList() {
 
     useEffect(() => {
         //  `${dataDomain}/boards` 로 비동기 요청
-        fetch(`${boardsDomain}`)  // JSON-Server 에게 students data 요청
+        fetch(`${boardsURL}`)  // JSON-Server 에게 students data 요청
             .then(res => {
                 return res.json();
             })
@@ -41,7 +41,7 @@ export default function StudentsList() {
     function getBoardsByPaging(pageNumber) {
         setCurrentPage(pageNumber);
 
-        fetch(`${boardsDomain}?page=${pageNumber}&size=5`)  // JSON-Server 에게 students data 요청
+        fetch(`${boardsURL}?page=${pageNumber}&size=5`)  // JSON-Server 에게 students data 요청
             .then(res => {
                 return res.json();
             })

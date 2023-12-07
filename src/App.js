@@ -1,10 +1,10 @@
-import BoardDetail from './component/BoardDetail';
-import BoardList from './component/BoardList';
+import BoardDetail from './component/boards/BoardDetail';
+import BoardList from './component/boards/BoardList';
 import './App.css';
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
-import BoardCreate from "./component/BoardCreate";
+import BoardCreate from "./component/boards/BoardCreate";
 import {createContext} from "react";
-import BoardEdit from "./component/BoardEdit";
+import BoardEdit from "./component/boards/BoardEdit";
 
 export const LoginContext = createContext({
     token: '',

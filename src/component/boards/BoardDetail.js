@@ -1,10 +1,10 @@
 import {useContext, useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
-import {boardsDomain} from "./common";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import ReplyList from "./ReplyList";
-import {LoginContext} from "../App";
+import ReplyList from "../replies/ReplyList";
+import {LoginContext} from "../../App";
 import BoardDelete from "./BoardDelete";
+import {boardsURL} from "../../common/URL";
 
 export default function BoardDetail( ) {
     const {id} = useParams();
@@ -21,7 +21,7 @@ export default function BoardDetail( ) {
 
     useEffect(() => {
         //GET Method (default) //http://..:3000/boards?board_no=1
-        fetch(`${boardsDomain}/${id}`)
+        fetch(`${boardsURL}/${id}`)
             .then(res => {
                 return res.json()
             })

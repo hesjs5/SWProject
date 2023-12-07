@@ -1,6 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {useNavigate} from "react-router-dom";
-import {boardsDomain} from "./common";
+import {boardsURL} from "../../common/URL";
 
 export default function BoardCreate() {
 
@@ -12,7 +12,7 @@ export default function BoardCreate() {
             content: document.getElementById("content").value
         };
         const token = localStorage.getItem("token");
-        await fetch(`${boardsDomain}`, {
+        await fetch(`${boardsURL}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json; charset=utf-8",

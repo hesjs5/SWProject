@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
-import {boardsDomain} from "./common";
 import ReplyCreate from "./ReplyCreate";
+import {boardsURL} from "../../common/URL";
 
 export default function ReplyList() {
 
@@ -20,7 +20,7 @@ export default function ReplyList() {
     }
 
     useEffect(() => {
-        fetch(`${boardsDomain}/${id}/replies`)
+        fetch(`${boardsURL}/${id}/replies`)
             .then(res => {
                 return res.json();
             })
@@ -41,7 +41,7 @@ export default function ReplyList() {
     function getRepliesByPaging(pageNumber) {
         setCurrentPage(pageNumber);
 
-        fetch(`${boardsDomain}/${id}/replies?page=${pageNumber}&size=10`)  // JSON-Server 에게 students data 요청
+        fetch(`${boardsURL}/${id}/replies?page=${pageNumber}&size=10`)  // JSON-Server 에게 students data 요청
             .then(res => {
                 return res.json();
             })

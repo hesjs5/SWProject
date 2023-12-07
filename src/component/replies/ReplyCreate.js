@@ -1,8 +1,8 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {useParams} from "react-router-dom";
 import {useContext} from "react";
-import {LoginContext} from "../App";
-import {boardsDomain} from "./common";
+import {LoginContext} from "../../App";
+import {boardsURL} from "../../common/URL";
 
 export default function ReplyCreate() {
 
@@ -16,7 +16,7 @@ export default function ReplyCreate() {
         console.log(replyCreateRequest);
         console.log(document.getElementById("replyContent"))
         const token = localStorage.getItem("token");
-        await fetch(`${boardsDomain}/${id}/replies`, {
+        await fetch(`${boardsURL}/${id}/replies`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json; charset=utf-8",

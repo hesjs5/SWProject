@@ -1,8 +1,8 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {useLocation, useNavigate, useParams} from "react-router-dom";
-import {boardsDomain} from "./common";
-import {PUT} from "../common/HttpMethod";
-import {APPLICATION_JSON} from "../common/HttpHeaders";
+import {PUT} from "../../common/HttpMethod";
+import {APPLICATION_JSON} from "../../common/HttpHeaders";
+import {boardsURL} from "../../common/URL";
 
 export default function BoardEdit() {
 
@@ -17,7 +17,7 @@ export default function BoardEdit() {
             content: document.getElementById("editContent").value
         };
         const token = localStorage.getItem("token");
-        await fetch(`${boardsDomain}/${id}`, {
+        await fetch(`${boardsURL}/${id}`, {
             method: PUT,
             headers: {
                 "Content-Type": APPLICATION_JSON,

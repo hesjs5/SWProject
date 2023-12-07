@@ -1,9 +1,9 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {useNavigate, useParams} from "react-router-dom";
-import {boardsDomain} from "./common";
-import {DELETE} from "../common/HttpMethod";
+import {DELETE} from "../../common/HttpMethod";
 import {useState} from "react";
 import {Button, Modal} from "react-bootstrap";
+import {boardsURL} from "../../common/URL";
 
 export default function BoardDelete() {
 
@@ -12,7 +12,7 @@ export default function BoardDelete() {
 
     async function deleteBoard() {
         const token = localStorage.getItem("token");
-        await fetch(`${boardsDomain}/${id}`, {
+        await fetch(`${boardsURL}/${id}`, {
             method: DELETE,
             headers: {
                 AUTHORIZATION: 'Bearer eyJyZWdEYXRlIjoxNzAxNjU5NTg3MDYyLCJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJOYW1lIjoiYiIsImV4cCI6MTcwNDI1MTU4NywibWVtYmVySUQiOiJiQGIuY29tIn0.b95p5hWUG7Ct-SkDlGIyAsLbjXTOMab0aLPOE2B6eVQ',
