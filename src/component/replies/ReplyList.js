@@ -1,7 +1,10 @@
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import ReplyCreate from "./ReplyCreate";
 import {boardsURL} from "../../common/URL";
+import BoardDelete from "../boards/BoardDelete";
+import {LoginContext} from "../../App";
+import ReplyDetail from "./ReplyDetail";
 
 export default function ReplyList() {
 
@@ -18,6 +21,8 @@ export default function ReplyList() {
     for (let i = 0; i < paging.totalPages; i++) {
         pageNumbers.push(i);
     }
+
+    const contextValue = useContext(LoginContext);
 
     useEffect(() => {
         fetch(`${boardsURL}/${id}/replies`)
@@ -60,23 +65,45 @@ export default function ReplyList() {
             );
     }
 
+    function EditAndDeleteButtonComponent(props) {
+        if (contextValue.isLoggedIn && contextValue.memberName === props.replyWriter) {
+            return (
+                <div className="d-grid gap-2">
+                    <button className="btn btn-warning btn-sm" type="button">수정</button>
+                    <BoardDelete/>
+                </div>
+            );
+        }
+    }
+
     return (
         <div className="container" style={{maxWidth: '1000px'}}>
             <div className="" id="replies">
                 <div>
                     {
                         replies.map((reply) => (
-                                <div className="card card-body mb-2" key={reply.id}>
-                                    <div className="card-title">
-                                        <span>{reply.memberName}</span>
-                                    </div>
-                                    <div className="card-text">
-                                        <span>{reply.content}</span>
-                                    </div>
-                                    <div className="card-subtitle">
-                                        <small className="text-muted">{reply.createDate}</small>
-                                    </div>
-                                </div>
+                                // <div className="card card-body mb-2" key={reply.id}>
+                                //     <div className="card-title">
+                                //         <span>{reply.memberName}</span>
+                                //     </div>
+                                //     <div className="card-text">
+                                //         {
+                                //             this.state.update === k ?
+                                //                 <input type="text" value={this.state.value} onChange={this.handleChange}
+                                //                        className="comment-update-input"/>
+                                //                 :
+                                //                 <span>{reply.content}</span>
+                                //         }
+                                //     </div>
+                                //     <div className="card-subtitle">
+                                //         <small className="text-muted">{reply.createDate}</small>
+                                //     </div>
+                                //
+                                //     <EditAndDeleteButtonComponent replyWriter={reply.memberName}/>
+                                //
+                                // </div>
+
+                                <ReplyDetail key={reply.id} reply={reply}/>
                             )
                         )
                     }
