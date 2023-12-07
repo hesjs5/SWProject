@@ -41,7 +41,7 @@ export default function BoardDelete() {
     return (
         <div className="d-grid">
             <Button className="btn-sm" variant="danger" onClick={showModal}>
-                Launch demo modal
+                삭제
             </Button>
 
             <Modal show={modalState} onHide={closeModal}>
