@@ -41,7 +41,7 @@ export default function StudentsList() {
     function getBoardsByPaging(pageNumber) {
         setCurrentPage(pageNumber);
 
-        fetch(`${boardsURL}?page=${pageNumber}&size=5`)  // JSON-Server 에게 students data 요청
+        fetch(`${boardsURL}?page=${pageNumber}`)  // JSON-Server 에게 students data 요청
             .then(res => {
                 return res.json();
             })

@@ -3,8 +3,8 @@ import {useNavigate, useParams} from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ReplyList from "../replies/ReplyList";
 import {LoginContext} from "../../App";
-import BoardDelete from "./BoardDelete";
 import {boardsURL} from "../../common/URL";
+import DeleteComponent from "../common/DeleteComponent";
 
 export default function BoardDetail( ) {
     const {id} = useParams();
@@ -40,12 +40,21 @@ export default function BoardDetail( ) {
         })
     }
 
+    function goBoards() {
+        navigate(`/boards`);
+    }
+
     function EditAndDeleteButtonComponent() {
         if (contextValue.isLoggedIn && contextValue.memberName === board.memberName) {
             return (
                 <div className="d-grid gap-2">
                     <button className="btn btn-warning btn-sm" type="button" onClick={goEditPage}>수정</button>
-                    <BoardDelete/>
+                    <DeleteComponent data={{
+                        requestURL: `${boardsURL}/${id}`,
+                        title: '글 삭제',
+                        id: board.id,
+                    }} afterEach={goBoards}
+                    />
                 </div>
             );
         }

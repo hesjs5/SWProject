@@ -61,13 +61,18 @@ export default function ReplyList() {
             );
     }
 
+    const deleteReply = replyId => {
+        const newReplies = replies.filter(reply => reply.id !== replyId);
+        setReplies(newReplies);
+    }
+
     return (
         <div className="container" style={{maxWidth: '1000px'}}>
             <div className="" id="replies">
                 <div>
                     {
                         replies.map((reply) => (
-                                <ReplyDetail key={reply.id} reply={reply}/>
+                                <ReplyDetail key={reply.id} reply={reply} deleteReply={deleteReply}/>
                             )
                         )
                     }

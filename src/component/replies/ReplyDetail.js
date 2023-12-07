@@ -5,13 +5,13 @@ import {LoginContext} from "../../App";
 import {boardsURL} from "../../common/URL";
 import {PUT} from "../../common/HttpMethod";
 import {APPLICATION_JSON} from "../../common/HttpHeaders";
-import ReplyDelete from "./ReplyDelete";
+import DeleteComponent from "../common/DeleteComponent";
 
 export default function ReplyDetail(props) {
     const {id} = useParams();
     const contextValue = useContext(LoginContext);
 
-    const [reply, setReply] = useState({
+    const [reply] = useState({
         id: props.reply.id,
         content: props.reply.content,
         createDate: props.reply.createDate,
@@ -63,13 +63,17 @@ export default function ReplyDetail(props) {
             });
     };
 
-
     function EditAndDeleteButtonComponent() {
         if (contextValue.isLoggedIn && contextValue.memberName === reply.memberName) {
             return (
                 <div className="d-grid gap-2">
                     <button className="btn btn-warning btn-sm" type="button" onClick={update}>수정</button>
-                    <ReplyDelete replyId={reply.id}/>
+                    <DeleteComponent data={{
+                        requestURL: `${boardsURL}/${id}/replies/${reply.id}`,
+                        title: '댓글 삭제',
+                        id: reply.id,
+                    }} afterEach={props.deleteReply}
+                    />
                 </div>
             );
         }
