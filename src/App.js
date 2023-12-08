@@ -5,6 +5,7 @@ import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import BoardCreate from "./component/boards/BoardCreate";
 import {createContext} from "react";
 import BoardEdit from "./component/boards/BoardEdit";
+import Signup from "./component/members/SignUp";
 import Header from "./component/layout/Header";
 
 export const LoginContext = createContext({
@@ -26,6 +27,8 @@ function App() {
                 <Header />
                 <BrowserRouter>
                     <Routes>
+
+                        <Route path="/signup" element={<Signup />}> </Route>
 
                         <Route path="/boards" element={<BoardList/>}> </Route>
                         <Route path="/boards/:id" element={<BoardDetail/>}> </Route>
