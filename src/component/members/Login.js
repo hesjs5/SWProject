@@ -1,15 +1,13 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useNavigate } from "react-router-dom";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { CardBody, Col, Form, FormLabel, Row } from "react-bootstrap";
 import axios from "axios";
 import { baseURL } from "../../common/URL";
-import { LoginContext, myLogin, myLogout } from "../../App";
+import { myLogin, myLogout } from "../../App";
 import { useDispatch } from "react-redux";
 
 export default function Login() {
-  const contextValue = useContext(LoginContext);
-
   const navigate = useNavigate();
   const [validated, setValidated] = useState(false);
   const [initialValues, setInitialValues] = useState({
