@@ -1,26 +1,27 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useNavigate } from "react-router-dom";
 import { boardsURL } from "../../common/URL";
+import axios from "axios";
 
 export default function BoardCreate() {
   const navigate = useNavigate();
 
-  async function create() {
+  const create = async () => {
     const postCreateRequest = {
       title: document.getElementById("title").value,
       content: document.getElementById("content").value,
     };
-    const token = localStorage.getItem("token");
-    await fetch(`${boardsURL}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json; charset=utf-8",
-        Authorization:
-          "Bearer eyJyZWdEYXRlIjoxNzAxNjU5NTg3MDYyLCJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJOYW1lIjoiYiIsImV4cCI6MTcwNDI1MTU4NywibWVtYmVySUQiOiJiQGIuY29tIn0.b95p5hWUG7Ct-SkDlGIyAsLbjXTOMab0aLPOE2B6eVQ",
-        Authorization2: `Bearer ` + token,
-      },
-      body: JSON.stringify(postCreateRequest),
-    })
+    const token = "Bearer ".concat(localStorage.getItem("token"));
+    const headerConfig = {
+      "Content-Type": "application/json; charset=utf-8",
+      Authorization:
+        "Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJiQGIuY29tIiwiZXhwIjoxNzAyMDA1MDcxLCJpZCI6ImJAYi5jb20iLCJ1c2VybmFtZSI6ImIifQ.gAB05Ljc4Vk6zkDsueKSnWzqs4sX8R18Rt53vWlM2qKmUASimNtBp_CYG5RFbvcTketqldBsfDa8GQbCwvkgdA",
+      Authorization2: token,
+    };
+    await axios
+      .post(`${boardsURL}`, postCreateRequest, {
+        headers: headerConfig,
+      })
       .then((response) => {
         console.log("success");
         console.log(response);
@@ -29,7 +30,7 @@ export default function BoardCreate() {
       .catch((error) => {
         console.log(error);
       });
-  }
+  };
 
   function goBoards() {
     navigate("/boards");

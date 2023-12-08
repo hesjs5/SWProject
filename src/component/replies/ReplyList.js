@@ -4,6 +4,7 @@ import ReplyCreate from "./ReplyCreate";
 import { boardsURL } from "../../common/URL";
 import ReplyDetail from "./ReplyDetail";
 import Pagination from "react-js-pagination";
+import axios from "axios";
 
 export default function ReplyList() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -27,14 +28,13 @@ export default function ReplyList() {
       setSearchParams(searchParams);
     }
 
-    fetch(
-      `${boardsURL}/${id}/replies?page=${
-        searchParams.get("page") - 1
-      }&size=${searchParams.get("size")}`,
-    )
-      .then((res) => {
-        return res.json();
-      })
+    axios
+      .get(
+        `${boardsURL}/${id}/replies?page=${
+          searchParams.get("page") - 1
+        }&size=${searchParams.get("size")}`,
+      )
+      .then((response) => response.data)
       .then((data) => {
         console.log(data);
         setReplies(data.repliesResponse);
@@ -50,21 +50,20 @@ export default function ReplyList() {
       });
   }, [id]);
 
-  function getRepliesByPaging(pageNumber) {
+  const getRepliesByPaging = async (pageNumber) => {
     searchParams.set("page", String(pageNumber));
     setSearchParams(searchParams);
 
     searchParams.set("size", "10");
     setSearchParams(searchParams);
 
-    fetch(
-      `${boardsURL}/${id}/replies?page=${
-        searchParams.get("page") - 1
-      }&size=${searchParams.get("size")}`,
-    ) // JSON-Server 에게 students data 요청
-      .then((res) => {
-        return res.json();
-      })
+    await axios
+      .get(
+        `${boardsURL}/${id}/replies?page=${
+          searchParams.get("page") - 1
+        }&size=${searchParams.get("size")}`,
+      ) // JSON-Server 에게 students data 요청
+      .then((response) => response.data)
       .then((data) => {
         console.log(data);
         setReplies(data.repliesResponse);
@@ -78,7 +77,7 @@ export default function ReplyList() {
           };
         });
       });
-  }
+  };
 
   const deleteReply = (replyId) => {
     const newReplies = replies.filter((reply) => reply.id !== replyId);

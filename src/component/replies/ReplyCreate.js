@@ -3,28 +3,29 @@ import { useParams } from "react-router-dom";
 import { useContext } from "react";
 import { LoginContext } from "../../App";
 import { boardsURL } from "../../common/URL";
+import axios from "axios";
 
 export default function ReplyCreate() {
   const { id } = useParams();
   const contextValue = useContext(LoginContext);
 
-  async function createReply() {
+  const createReply = async () => {
     const replyCreateRequest = {
       content: document.getElementById("replyContent").value,
     };
     console.log(replyCreateRequest);
     console.log(document.getElementById("replyContent"));
-    const token = localStorage.getItem("token");
-    await fetch(`${boardsURL}/${id}/replies`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json; charset=utf-8",
-        Authorization:
-          "Bearer eyJyZWdEYXRlIjoxNzAxODQ3ODgxOTA3LCJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJOYW1lIjoiYiIsImV4cCI6MTcwNDQzOTg4MSwibWVtYmVySUQiOiJiQGIuY29tIn0.PQD-3fOC6g9uk6SEWAZnl9_JcV4oK0jswvnl1jwg1SY",
-        Authorization2: `Bearer ` + token,
-      },
-      body: JSON.stringify(replyCreateRequest),
-    })
+    const token = "Bearer ".concat(localStorage.getItem("token"));
+    const headersConfig = {
+      "Content-Type": "application/json",
+      Authorization:
+        "Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJiQGIuY29tIiwiZXhwIjoxNzAyMDA1MDcxLCJpZCI6ImJAYi5jb20iLCJ1c2VybmFtZSI6ImIifQ.gAB05Ljc4Vk6zkDsueKSnWzqs4sX8R18Rt53vWlM2qKmUASimNtBp_CYG5RFbvcTketqldBsfDa8GQbCwvkgdA",
+      Authorization2: token,
+    };
+    await axios
+      .post(`${boardsURL}/${id}/replies`, replyCreateRequest, {
+        headers: headersConfig,
+      })
       .then((response) => {
         console.log("success");
         console.log(response);
@@ -32,7 +33,7 @@ export default function ReplyCreate() {
       .catch((error) => {
         console.log(error);
       });
-  }
+  };
 
   function isNotLoggedIn() {
     return !contextValue.isLoggedIn;

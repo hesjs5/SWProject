@@ -1,19 +1,21 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
-import { DELETE } from "../../common/HttpMethod";
+import axios from "axios";
 
 export default function DeleteComponent(props) {
   const deleteRequest = async () => {
-    const token = localStorage.getItem("token");
-    await fetch(`${props.data.requestURL}`, {
-      method: DELETE,
-      headers: {
-        AUTHORIZATION:
-          "Bearer eyJyZWdEYXRlIjoxNzAxNjU5NTg3MDYyLCJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJOYW1lIjoiYiIsImV4cCI6MTcwNDI1MTU4NywibWVtYmVySUQiOiJiQGIuY29tIn0.b95p5hWUG7Ct-SkDlGIyAsLbjXTOMab0aLPOE2B6eVQ",
-        Authorization2: `Bearer ` + token,
-      },
-    })
+    const token = "Bearer ".concat(localStorage.getItem("token"));
+    const headersConfig = {
+      "Content-Type": "application/json",
+      Authorization:
+        "Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJiQGIuY29tIiwiZXhwIjoxNzAyMDA1MDcxLCJpZCI6ImJAYi5jb20iLCJ1c2VybmFtZSI6ImIifQ.gAB05Ljc4Vk6zkDsueKSnWzqs4sX8R18Rt53vWlM2qKmUASimNtBp_CYG5RFbvcTketqldBsfDa8GQbCwvkgdA",
+      Authorization2: token,
+    };
+    await axios
+      .delete(`${props.data.requestURL}`, {
+        headers: headersConfig,
+      })
       .then((response) => {
         console.log("success");
         console.log(response);

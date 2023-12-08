@@ -3,9 +3,8 @@ import { useParams } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { LoginContext } from "../../App";
 import { boardsURL } from "../../common/URL";
-import { PUT } from "../../common/HttpMethod";
-import { APPLICATION_JSON } from "../../common/HttpHeaders";
 import DeleteComponent from "../common/DeleteComponent";
+import axios from "axios";
 
 export default function ReplyDetail(props) {
   const { id } = useParams();
@@ -44,17 +43,17 @@ export default function ReplyDetail(props) {
     const postEditRequest = {
       content: replyContent,
     };
-    const token = localStorage.getItem("token");
-    await fetch(`${boardsURL}/${id}/replies/${reply.id}`, {
-      method: PUT,
-      headers: {
-        "Content-Type": APPLICATION_JSON,
-        AUTHORIZATION:
-          "Bearer eyJyZWdEYXRlIjoxNzAxNjU5NTg3MDYyLCJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJOYW1lIjoiYiIsImV4cCI6MTcwNDI1MTU4NywibWVtYmVySUQiOiJiQGIuY29tIn0.b95p5hWUG7Ct-SkDlGIyAsLbjXTOMab0aLPOE2B6eVQ",
-        Authorization2: `Bearer ` + token,
-      },
-      body: JSON.stringify(postEditRequest),
-    })
+    const token = "Bearer ".concat(localStorage.getItem("token"));
+    const headersConfig = {
+      "Content-Type": "application/json",
+      Authorization:
+        "Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJiQGIuY29tIiwiZXhwIjoxNzAyMDA4MTYxLCJpZCI6ImJAYi5jb20iLCJ1c2VybmFtZSI6ImIifQ.LxEKjqkeEwLFmyZ4-UIINX3jN3ucRGTc5fVvDEaEU3DefIJ7HrAAp4_dXjG4sLywEAacyuw5qQdja6mYram_TQ",
+      Authorization2: token,
+    };
+    await axios
+      .put(`${boardsURL}/${id}/replies/${reply.id}`, postEditRequest, {
+        headers: headersConfig,
+      })
       .then((response) => {
         console.log("success");
         console.log(response);
