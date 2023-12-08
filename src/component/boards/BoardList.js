@@ -3,6 +3,7 @@ import {Link, useNavigate, useSearchParams} from "react-router-dom";
 import {boardsURL} from "../../common/URL";
 import Pagination from "react-js-pagination";
 import '../../css/Paging.css';
+import axios from "axios";
 
 export default function BoardList() {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -26,10 +27,8 @@ export default function BoardList() {
         }
 
         //  `${dataDomain}/boards` 로 비동기 요청
-        fetch(`${boardsURL}?page=${searchParams.get("page") - 1}&size=${searchParams.get("size")}`)  // JSON-Server 에게 students data 요청
-            .then(res => {
-                return res.json();
-            })
+        axios.get(`${boardsURL}?page=${searchParams.get("page") - 1}&size=${searchParams.get("size")}`)  // JSON-Server 에게 students data 요청
+            .then((response) => response.data)
             .then(data => {
                     console.log(data);
                     setBoards(data.postsResponse);
@@ -46,17 +45,15 @@ export default function BoardList() {
             );
     }, []);  // 처음 한번만 실행 됨
 
-    function getBoardsByPaging(pageNumber) {
+    const getBoardsByPaging = async (pageNumber) => {
         searchParams.set("page", String(pageNumber));
         setSearchParams(searchParams);
 
         searchParams.set("size", "10");
         setSearchParams(searchParams);
 
-        fetch(`${boardsURL}?page=${searchParams.get("page") - 1}&size=${searchParams.get("size")}`)  // JSON-Server 에게 students data 요청
-            .then(res => {
-                return res.json();
-            })
+        await axios.get(`${boardsURL}?page=${searchParams.get("page") - 1}&size=${searchParams.get("size")}`)  // JSON-Server 에게 students data 요청
+            .then((response) => response.data)
             .then(data => {
                     console.log(data);
                     setBoards(data.postsResponse);
