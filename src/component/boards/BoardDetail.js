@@ -47,15 +47,23 @@ export default function BoardDetail( ) {
     function EditAndDeleteButtonComponent() {
         if (contextValue.isLoggedIn && contextValue.memberName === board.memberName) {
             return (
-                <div className="d-grid gap-2">
-                    <button className="btn btn-warning btn-sm" type="button" onClick={goEditPage}>수정</button>
-                    <DeleteComponent data={{
-                        requestURL: `${boardsURL}/${id}`,
-                        title: '글 삭제',
-                        id: board.id,
-                    }} afterEach={goBoards}
-                    />
-                </div>
+              <div className="d-grid gap-2">
+                <button
+                  className="btn btn-warning btn-sm"
+                  type="button"
+                  onClick={goEditPage}
+                >
+                  수정
+                </button>
+                <DeleteComponent
+                  data={{
+                    requestURL: `${boardsURL}/${id}`,
+                    title: "글 삭제",
+                    id: board.id,
+                  }}
+                  afterEach={goBoards}
+                />
+              </div>
             );
         }
     }
