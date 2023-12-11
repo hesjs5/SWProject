@@ -1,14 +1,15 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { LoginContext } from "../../App";
 import { boardsURL } from "../../common/URL";
 import DeleteComponent from "../common/DeleteComponent";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 export default function ReplyDetail(props) {
   const { id } = useParams();
-  const contextValue = useContext(LoginContext);
+  const isLoggedInState = useSelector((state) => state.isLoggedIn);
+  const loginMemberNameState = useSelector((state) => state.memberName);
 
   const [reply] = useState({
     id: props.reply.id,
@@ -43,12 +44,10 @@ export default function ReplyDetail(props) {
     const postEditRequest = {
       content: replyContent,
     };
-    const token = "Bearer ".concat(localStorage.getItem("token"));
+    const token = localStorage.getItem("token");
     const headersConfig = {
       "Content-Type": "application/json",
-      Authorization:
-        "Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJiQGIuY29tIiwiZXhwIjoxNzAyMDA4MTYxLCJpZCI6ImJAYi5jb20iLCJ1c2VybmFtZSI6ImIifQ.LxEKjqkeEwLFmyZ4-UIINX3jN3ucRGTc5fVvDEaEU3DefIJ7HrAAp4_dXjG4sLywEAacyuw5qQdja6mYram_TQ",
-      Authorization2: token,
+      Authorization: token,
     };
     await axios
       .put(`${boardsURL}/${id}/replies/${reply.id}`, postEditRequest, {
@@ -64,10 +63,7 @@ export default function ReplyDetail(props) {
   };
 
   function EditAndDeleteButtonComponent() {
-    if (
-      contextValue.isLoggedIn &&
-      contextValue.memberName === reply.memberName
-    ) {
+    if (isLoggedInState && loginMemberNameState === reply.memberName) {
       return (
         <div className="d-grid gap-2">
           <button

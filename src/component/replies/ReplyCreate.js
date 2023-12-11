@@ -1,13 +1,12 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useParams } from "react-router-dom";
-import { useContext } from "react";
-import { LoginContext } from "../../App";
 import { boardsURL } from "../../common/URL";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 export default function ReplyCreate() {
   const { id } = useParams();
-  const contextValue = useContext(LoginContext);
+  const isLoggedInState = useSelector((state) => state.isLoggedIn);
 
   const createReply = async () => {
     const replyCreateRequest = {
@@ -15,12 +14,10 @@ export default function ReplyCreate() {
     };
     console.log(replyCreateRequest);
     console.log(document.getElementById("replyContent"));
-    const token = "Bearer ".concat(localStorage.getItem("token"));
+    const token = localStorage.getItem("token");
     const headersConfig = {
       "Content-Type": "application/json",
-      Authorization:
-        "Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJiQGIuY29tIiwiZXhwIjoxNzAyMDA1MDcxLCJpZCI6ImJAYi5jb20iLCJ1c2VybmFtZSI6ImIifQ.gAB05Ljc4Vk6zkDsueKSnWzqs4sX8R18Rt53vWlM2qKmUASimNtBp_CYG5RFbvcTketqldBsfDa8GQbCwvkgdA",
-      Authorization2: token,
+      Authorization: token,
     };
     await axios
       .post(`${boardsURL}/${id}/replies`, replyCreateRequest, {
@@ -36,7 +33,7 @@ export default function ReplyCreate() {
   };
 
   function isNotLoggedIn() {
-    return !contextValue.isLoggedIn;
+    return !isLoggedInState;
   }
 
   function goLogin() {

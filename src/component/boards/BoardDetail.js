@@ -1,16 +1,17 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import ReplyList from "../replies/ReplyList";
-import { LoginContext } from "../../App";
 import { boardsURL } from "../../common/URL";
 import DeleteComponent from "../common/DeleteComponent";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 export default function BoardDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const contextValue = useContext(LoginContext);
+  const isLoggedInState = useSelector((state) => state.isLoggedIn);
+  const loginMemberNameState = useSelector((state) => state.memberName);
 
   const [board, setBoard] = useState({
     // "board_no": 1,
@@ -45,10 +46,7 @@ export default function BoardDetail() {
   }
 
   function EditAndDeleteButtonComponent() {
-    if (
-      contextValue.isLoggedIn &&
-      contextValue.memberName === board.memberName
-    ) {
+    if (isLoggedInState && loginMemberNameState === board.memberName) {
       return (
         <div className="d-grid gap-2">
           <button

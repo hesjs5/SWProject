@@ -11,12 +11,10 @@ export default function BoardCreate() {
       title: document.getElementById("title").value,
       content: document.getElementById("content").value,
     };
-    const token = "Bearer ".concat(localStorage.getItem("token"));
+    const token = localStorage.getItem("token");
     const headerConfig = {
       "Content-Type": "application/json; charset=utf-8",
-      Authorization:
-        "Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJiQGIuY29tIiwiZXhwIjoxNzAyMDA1MDcxLCJpZCI6ImJAYi5jb20iLCJ1c2VybmFtZSI6ImIifQ.gAB05Ljc4Vk6zkDsueKSnWzqs4sX8R18Rt53vWlM2qKmUASimNtBp_CYG5RFbvcTketqldBsfDa8GQbCwvkgdA",
-      Authorization2: token,
+      Authorization: token,
     };
     await axios
       .post(`${boardsURL}`, postCreateRequest, {
