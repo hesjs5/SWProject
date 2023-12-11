@@ -10,17 +10,13 @@ import Header from "./component/layout/Header";
 import Login from "./component/members/Login";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
+import PrivateRoute from "./common/PrivateRoute";
+import PublicRoute from "./common/PublicRoute";
 
 export const LoginContext = createContext({
   token: "",
   isLoggedIn: false,
 });
-
-const contextValue = {
-  token: "",
-  isLoggedIn: false,
-  memberName: "",
-};
 
 export const myLogin = (payload) => {
   return {
@@ -67,36 +63,38 @@ const store = configureStore({
 function App() {
   return (
     <div className="App">
-      <LoginContext.Provider value={contextValue}>
-        <Provider store={store}>
-          <Header />
-          <BrowserRouter>
-            <Routes>
+      <Provider store={store}>
+        <Header />
+        <BrowserRouter>
+          <Routes>
+            <Route element={<PublicRoute />}>
               <Route path="/signup" element={<Signup />}>
                 {" "}
               </Route>
               <Route path="/login" element={<Login />}>
                 {" "}
               </Route>
+            </Route>
 
-              {/**/}
+            {/**/}
 
-              <Route path="/boards" element={<BoardList />}>
-                {" "}
-              </Route>
-              <Route path="/boards/:id" element={<BoardDetail />}>
-                {" "}
-              </Route>
+            <Route path="/boards" element={<BoardList />}>
+              {" "}
+            </Route>
+            <Route path="/boards/:id" element={<BoardDetail />}>
+              {" "}
+            </Route>
+            <Route element={<PrivateRoute />}>
               <Route path="/boards/create" element={<BoardCreate />}>
                 {" "}
               </Route>
               <Route path="/boards/:id/edit" element={<BoardEdit />}>
                 {" "}
               </Route>
-            </Routes>
-          </BrowserRouter>
-        </Provider>
-      </LoginContext.Provider>
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </Provider>
     </div>
   );
 }

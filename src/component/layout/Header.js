@@ -1,12 +1,48 @@
 import { Container, Nav, Navbar } from "react-bootstrap";
-import { useContext } from "react";
-import { LoginContext } from "../../App";
+import axios from "axios";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { myLogin } from "../../App";
 
 export default function Header() {
-  const contextValue = useContext(LoginContext);
+  const isLoggedInState = useSelector((state) => state.isLoggedIn);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token !== null && token.length > 0) {
+      axios
+        .get("http://localhost:8080/token", {
+          headers: {
+            Authorization: token,
+          },
+        })
+        .then((response) => {
+          console.log("response = ", response);
+          if (response.data.validate === true) {
+            setLogin(token, response.data.username);
+          }
+          return response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+          return false;
+        });
+    }
+  }, []); // 처음 한번만 실행 됨
+
+  const setLogin = (token, memberName) => {
+    dispatch(
+      myLogin({
+        token: token,
+        isLoggedIn: true,
+        memberName: memberName,
+      }),
+    );
+  };
 
   const LoginComponent = () => {
-    if (contextValue.isLoggedIn) {
+    if (isLoggedInState) {
       return (
         <Nav>
           <Nav.Link href="/myPage">My page</Nav.Link>
