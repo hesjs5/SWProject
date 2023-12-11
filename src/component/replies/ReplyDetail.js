@@ -41,7 +41,7 @@ export default function ReplyDetail(props) {
   };
 
   const edit = async () => {
-    const postEditRequest = {
+    const replyEditRequest = {
       content: replyContent,
     };
     const token = localStorage.getItem("token");
@@ -50,7 +50,7 @@ export default function ReplyDetail(props) {
       Authorization: token,
     };
     await axios
-      .put(`${boardsURL}/${id}/replies/${reply.id}`, postEditRequest, {
+      .put(`${boardsURL}/${id}/replies/${reply.id}`, replyEditRequest, {
         headers: headersConfig,
       })
       .then((response) => {

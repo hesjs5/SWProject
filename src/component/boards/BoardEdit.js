@@ -2,6 +2,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { boardsURL } from "../../common/URL";
 import axios from "axios";
+import { useState } from "react";
 
 export default function BoardEdit() {
   const { id } = useParams();
@@ -9,11 +10,20 @@ export default function BoardEdit() {
   const location = useLocation();
   let boardInfo = { ...location.state };
 
+  const [postEditRequest, setPostEditRequest] = useState({
+    title: boardInfo?.title || "",
+    content: boardInfo?.content || "",
+  });
+
+  const changePostEditRequest = (e) => {
+    const { name, value } = e.target;
+    setPostEditRequest({
+      ...postEditRequest,
+      [name]: value,
+    });
+  };
+
   const edit = async () => {
-    const postEditRequest = {
-      title: document.getElementById("editTitle").value,
-      content: document.getElementById("editContent").value,
-    };
     const token = localStorage.getItem("token");
     const headersConfig = {
       "Content-Type": "application/json",
@@ -45,29 +55,31 @@ export default function BoardEdit() {
       </div>
 
       <div className="row mb-3">
-        <label className="col-sm-2 col-form-label" htmlFor="editTitle">
+        <label className="col-sm-2 col-form-label" htmlFor="title">
           제목
         </label>
         <div className="col-sm-10">
           <input
             className="form-control"
-            id="editTitle"
-            name="editTitle"
+            id="title"
+            name="title"
             type="text"
-            defaultValue={boardInfo?.title || ""}
+            value={postEditRequest.title}
+            onChange={changePostEditRequest}
           ></input>
         </div>
       </div>
       <div className="row mb-3">
-        <label className="col-sm-2 col-form-label" htmlFor="editContent">
+        <label className="col-sm-2 col-form-label" htmlFor="content">
           내용
         </label>
         <div className="col-sm-10">
           <textarea
             className="form-control"
-            id="editContent"
-            name="editContent"
-            defaultValue={boardInfo?.content || ""}
+            id="content"
+            name="content"
+            value={postEditRequest.content}
+            onChange={changePostEditRequest}
             rows="10"
           ></textarea>
         </div>

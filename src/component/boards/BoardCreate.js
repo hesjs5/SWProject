@@ -1,16 +1,26 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { boardsURL } from "../../common/URL";
 import axios from "axios";
 
 export default function BoardCreate() {
   const navigate = useNavigate();
 
+  const [postCreateRequest, setPostCreateRequest] = useState({
+    title: "",
+    content: "",
+  });
+
+  const changePostCreateRequest = (e) => {
+    const { value, name } = e.target;
+    setPostCreateRequest({
+      ...postCreateRequest,
+      [name]: value,
+    });
+  };
+
   const create = async () => {
-    const postCreateRequest = {
-      title: document.getElementById("title").value,
-      content: document.getElementById("content").value,
-    };
     const token = localStorage.getItem("token");
     const headerConfig = {
       "Content-Type": "application/json; charset=utf-8",
@@ -51,6 +61,8 @@ export default function BoardCreate() {
             name="title"
             placeholder="제목을 입력해주세요."
             type="text"
+            value={postCreateRequest.title}
+            onChange={changePostCreateRequest}
           ></input>
         </div>
       </div>
@@ -65,6 +77,8 @@ export default function BoardCreate() {
             name="content"
             placeholder="내용을 입력해주세요."
             rows="10"
+            value={postCreateRequest.content}
+            onChange={changePostCreateRequest}
           ></textarea>
         </div>
       </div>
