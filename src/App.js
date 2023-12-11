@@ -64,8 +64,9 @@ function App() {
   return (
     <div className="App">
       <Provider store={store}>
-        <Header />
         <BrowserRouter>
+          <Header />
+
           <Routes>
             <Route element={<PublicRoute />}>
               <Route path="/signup" element={<Signup />}>

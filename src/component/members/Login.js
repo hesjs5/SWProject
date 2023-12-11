@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { CardBody, Col, Form, FormLabel, Row } from "react-bootstrap";
 import axios from "axios";
 import { baseURL } from "../../common/URL";
-import { myLogin, myLogout } from "../../App";
+import { myLogin } from "../../App";
 import { useDispatch } from "react-redux";
 
 export default function Login() {
@@ -86,10 +86,6 @@ export default function Login() {
         memberName: memberName,
       }),
     );
-  };
-
-  const setLogout = () => {
-    dispatch(myLogout());
   };
 
   return (

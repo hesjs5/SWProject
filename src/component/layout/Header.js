@@ -2,7 +2,8 @@ import { Container, Nav, Navbar } from "react-bootstrap";
 import axios from "axios";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { myLogin } from "../../App";
+import { myLogin, myLogout } from "../../App";
+import { useNavigate } from "react-router-dom";
 
 export default function Header() {
   const isLoggedInState = useSelector((state) => state.isLoggedIn);
@@ -41,12 +42,19 @@ export default function Header() {
     );
   };
 
+  const navigate = useNavigate();
+  const setLogout = () => {
+    localStorage.removeItem("token");
+    dispatch(myLogout());
+    navigate("/boards");
+  };
+
   const LoginComponent = () => {
     if (isLoggedInState) {
       return (
         <Nav>
           <Nav.Link href="/myPage">My page</Nav.Link>
-          <Nav.Link href="/signout">Sign out</Nav.Link>
+          <Nav.Link onClick={setLogout}>Sign out</Nav.Link>
         </Nav>
       );
     }
