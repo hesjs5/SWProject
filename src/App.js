@@ -69,29 +69,16 @@ function App() {
 
           <Routes>
             <Route element={<PublicRoute />}>
-              <Route path="/signup" element={<Signup />}>
-                {" "}
-              </Route>
-              <Route path="/login" element={<Login />}>
-                {" "}
-              </Route>
+              <Route path="/signup" element={<Signup />} />
+              <Route path="/login" element={<Login />} />
             </Route>
 
-            {/**/}
+            <Route path="/boards" element={<BoardList />} />
+            <Route path="/boards/:id" element={<BoardDetail />} />
 
-            <Route path="/boards" element={<BoardList />}>
-              {" "}
-            </Route>
-            <Route path="/boards/:id" element={<BoardDetail />}>
-              {" "}
-            </Route>
             <Route element={<PrivateRoute />}>
-              <Route path="/boards/create" element={<BoardCreate />}>
-                {" "}
-              </Route>
-              <Route path="/boards/:id/edit" element={<BoardEdit />}>
-                {" "}
-              </Route>
+              <Route path="/boards/create" element={<BoardCreate />} />
+              <Route path="/boards/:id/edit" element={<BoardEdit />} />
             </Route>
           </Routes>
         </BrowserRouter>
