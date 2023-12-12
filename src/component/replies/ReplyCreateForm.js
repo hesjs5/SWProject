@@ -4,7 +4,7 @@ import { useState } from "react";
 import { customAuthAndContentAxios } from "../../common/CustomAxiosUtils";
 import { boardsUrl } from "../../common/URL";
 
-export default function ReplyCreateForm() {
+export default function ReplyCreateForm(props) {
   const { id } = useParams();
 
   const [replyCreateRequest, setReplyCreateRequest] = useState({
@@ -19,12 +19,12 @@ export default function ReplyCreateForm() {
     });
   };
 
-  // todo replyList에 생성된 값 추가하기
   const createReply = async () => {
     await customAuthAndContentAxios
       .post(`${boardsUrl}/${id}/replies`, replyCreateRequest)
       .then((response) => {
         console.log("createReply response = ", response);
+        props.createReply(response.data);
       })
       .catch((error) => {
         console.log(error);

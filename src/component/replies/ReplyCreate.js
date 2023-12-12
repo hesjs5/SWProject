@@ -3,18 +3,18 @@ import { useSelector } from "react-redux";
 import ReplyCreateForm from "./ReplyCreateForm";
 import { useNavigate } from "react-router-dom";
 
-export default function ReplyCreate() {
+export default function ReplyCreate(props) {
   const navigate = useNavigate();
   const isLoggedInState = useSelector((state) => state.isLoggedIn);
 
-  function goLogin() {
+  const goLogin = () => {
     console.log("goLogin");
     navigate("/login");
-  }
+  };
 
-  function ReplyForm() {
+  const ReplyForm = () => {
     if (isLoggedInState) {
-      return <ReplyCreateForm />;
+      return <ReplyCreateForm createReply={props.createReply} />;
     }
 
     return (
@@ -24,13 +24,13 @@ export default function ReplyCreate() {
           rows="3"
           id="content"
           name="content"
-          defaultValue="댓글을 작성하려면 로그인 해주세요"
-          disabled
+          value="댓글을 작성하려면 로그인 해주세요"
+          readOnly
           onClick={goLogin}
         />
       </div>
     );
-  }
+  };
 
   return (
     <div className="container" style={{ maxWidth: "1000px" }}>

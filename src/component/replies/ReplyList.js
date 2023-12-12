@@ -64,6 +64,15 @@ export default function ReplyList() {
     setReplies(newReplies);
   };
 
+  const createReply = (reply) => {
+    const newReplies = replies.concat(reply);
+    newReplies.sort((prev, current) => {
+      return current.id - prev.id;
+    });
+    console.log("newReplies = ", newReplies);
+    setReplies(newReplies);
+  };
+
   return (
     <div className="container" style={{ maxWidth: "1000px" }}>
       <div className="" id="replies">
@@ -87,7 +96,7 @@ export default function ReplyList() {
           onChange={getRepliesByPaging}
         />
 
-        <ReplyCreate />
+        <ReplyCreate createReply={createReply} />
       </div>
     </div>
   );
