@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { useState } from "react";
 import { customAuthAndContentAxios } from "../../common/CustomAxiosUtils";
 import { boardsUrl } from "../../common/URL";
+import { Button, Form, Stack } from "react-bootstrap";
 
 export default function ReplyCreateForm(props) {
   const { id } = useParams();
@@ -33,18 +34,21 @@ export default function ReplyCreateForm(props) {
 
   return (
     <div>
-      <textarea
-        className="form-control"
+      <Form.Control
+        className="mb-3"
+        as="textarea"
         id="content"
         name="content"
         value={replyCreateRequest.content}
         onChange={changeReplyCreateRequest}
-        rows="3"
+        rows={3}
       />
 
-      <button className="btn btn-primary" onClick={createReply}>
-        댓글
-      </button>
+      <Stack direction="horizontal">
+        <Button variant="primary" onClick={createReply}>
+          댓글 작성
+        </Button>
+      </Stack>
     </div>
   );
 }
