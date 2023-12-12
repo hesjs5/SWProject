@@ -25,7 +25,11 @@ export default function DeleteComponent(props) {
 
   return (
     <div>
-      <Button className="btn-sm" variant="danger" onClick={showModal}>
+      <Button
+        className="btn-sm text-decoration-none text-danger"
+        variant="link"
+        onClick={showModal}
+      >
         삭제
       </Button>
 

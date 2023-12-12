@@ -89,7 +89,7 @@ export default function BoardDetail() {
             <p id="content">{board.content}</p>
           </div>
 
-          <Stack direction="horizontal" gap={3}>
+          <Stack direction="horizontal">
             <EditButton />
             <DeleteButton />
           </Stack>

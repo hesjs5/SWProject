@@ -87,8 +87,6 @@ export default function ReplyList() {
           onChange={getRepliesByPaging}
         />
 
-        <hr />
-
         <ReplyCreate />
       </div>
     </div>

@@ -31,7 +31,11 @@ export default function BoardEditButton({ propsBoard }) {
 
   const EditButtonComponent = () => {
     return (
-      <Button className="btn-sm" variant="warning" onClick={goEditPage}>
+      <Button
+        className="btn-sm text-decoration-none text-success"
+        variant="link"
+        onClick={goEditPage}
+      >
         수정
       </Button>
     );

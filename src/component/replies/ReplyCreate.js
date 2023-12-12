@@ -34,7 +34,12 @@ export default function ReplyCreate() {
 
   return (
     <div className="container" style={{ maxWidth: "1000px" }}>
-      <div>댓글 작성</div>
+      <div className="text-start fw-bold">
+        <small>댓글 작성</small>
+      </div>
+
+      <hr />
+
       <ReplyForm />
     </div>
   );

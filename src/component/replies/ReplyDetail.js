@@ -5,8 +5,7 @@ import DeleteComponent from "../common/DeleteComponent";
 import { useSelector } from "react-redux";
 import { customAuthAndContentAxios } from "../../common/CustomAxiosUtils";
 import { boardsUrl } from "../../common/URL";
-import { Card, Stack } from "react-bootstrap";
-import button from "bootstrap/js/src/button";
+import { Button, Card, Stack } from "react-bootstrap";
 
 export default function ReplyDetail(props) {
   const { id } = useParams();
@@ -68,18 +67,23 @@ export default function ReplyDetail(props) {
     if (isLoggedInState && loginMemberNameState === reply.memberName) {
       if (updateState) {
         return (
-          <button className="btn btn-warning btn-sm" onClick={update}>
+          <Button
+            className="btn-sm text-decoration-none text-success"
+            variant="link"
+            onClick={update}
+          >
             수정하기
-          </button>
+          </Button>
         );
       }
       return (
-        <button
-          className="btn btn-warning btn-sm"
+        <Button
+          className="btn-sm text-decoration-none text-success"
+          variant="link"
           onClick={setUpdateStateToTrue}
         >
           수정
-        </button>
+        </Button>
       );
     }
   };
@@ -88,12 +92,13 @@ export default function ReplyDetail(props) {
     if (isLoggedInState && loginMemberNameState === reply.memberName) {
       if (updateState) {
         return (
-          <button
-            className="btn btn-dark btn-sm"
+          <Button
+            className="btn-sm text-decoration-none text-secondary"
+            variant="link"
             onClick={setUpdateStateToFalse}
           >
             취소
-          </button>
+          </Button>
         );
       }
       return (
@@ -112,7 +117,7 @@ export default function ReplyDetail(props) {
   return (
     <Card className="mb-2 text-start">
       <Card.Body>
-        <Stack className="mb-3" direction="horizontal" gap={3}>
+        <Stack className="mb-3" direction="horizontal">
           <div>
             <span className="fw-semibold">{reply.memberName}</span>
           </div>
@@ -135,8 +140,8 @@ export default function ReplyDetail(props) {
             <span>{replyContent}</span>
           )}
         </Card.Subtitle>
-        <Card.Subtitle className="mb-3 text-muted">
-          <small>{reply.createDate}</small>
+        <Card.Subtitle className="mb-3">
+          <small className="text-secondary">{reply.createDate}</small>
         </Card.Subtitle>
       </Card.Body>
     </Card>
