@@ -6,7 +6,10 @@ import "../../css/Paging.css";
 import axios from "axios";
 
 export default function BoardList() {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams({
+    page: 1,
+    size: 10,
+  });
 
   const [boards, setBoards] = useState([]);
   const [paging, setPaging] = useState({
@@ -17,22 +20,22 @@ export default function BoardList() {
   });
 
   useEffect(() => {
-    if (searchParams.get("page") === null) {
-      searchParams.set("page", "1");
-      setSearchParams(searchParams);
+    if (!searchParams.has("page")) {
+      searchParams.append("page", "1");
     }
-    if (searchParams.get("size") === null) {
-      searchParams.set("size", "10");
-      setSearchParams(searchParams);
+    if (!searchParams.has("size")) {
+      searchParams.append("size", "10");
     }
+    setSearchParams(searchParams);
 
     //  `${dataDomain}/boards` 로 비동기 요청
     axios
-      .get(
-        `${boardsURL}?page=${
-          searchParams.get("page") - 1
-        }&size=${searchParams.get("size")}`,
-      ) // JSON-Server 에게 students data 요청
+      .get(`${boardsURL}`, {
+        params: {
+          page: searchParams.get("page") - 1,
+          size: searchParams.get("size"),
+        },
+      }) // JSON-Server 에게 students data 요청
       .then((response) => response.data)
       .then((data) => {
         console.log(data);
@@ -50,18 +53,18 @@ export default function BoardList() {
   }, []); // 처음 한번만 실행 됨
 
   const getBoardsByPaging = async (pageNumber) => {
-    searchParams.set("page", String(pageNumber));
-    setSearchParams(searchParams);
-
+    searchParams.set("page", pageNumber);
+    console.log("pageNumber - 1 = ", pageNumber);
     searchParams.set("size", "10");
     setSearchParams(searchParams);
 
     await axios
-      .get(
-        `${boardsURL}?page=${
-          searchParams.get("page") - 1
-        }&size=${searchParams.get("size")}`,
-      ) // JSON-Server 에게 students data 요청
+      .get(`${boardsURL}`, {
+        params: {
+          page: searchParams.get("page") - 1,
+          size: searchParams.get("size"),
+        },
+      }) // JSON-Server 에게 students data 요청
       .then((response) => response.data)
       .then((data) => {
         console.log(data);
