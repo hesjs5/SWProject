@@ -8,7 +8,7 @@ export default function BoardEdit() {
   const { id } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
-  let boardInfo = { ...location.state };
+  const boardInfo = { ...location.state };
 
   const [postEditRequest, setPostEditRequest] = useState({
     title: boardInfo?.title || "",
@@ -27,8 +27,7 @@ export default function BoardEdit() {
     await customAuthAndContentAxios
       .put(`${boardsUrl}/${id}`, postEditRequest)
       .then((response) => {
-        console.log("success");
-        console.log(response);
+        console.log("board edit response = ", response);
         goBoard();
       })
       .catch((error) => {
@@ -37,7 +36,7 @@ export default function BoardEdit() {
   };
 
   function goBoard() {
-    navigate(`/boards/${id}`);
+    navigate(`${boardsUrl}/${id}`);
   }
 
   return (
