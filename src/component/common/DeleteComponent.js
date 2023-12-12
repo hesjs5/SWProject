@@ -24,7 +24,7 @@ export default function DeleteComponent(props) {
   const showModal = () => setModalState(true);
 
   return (
-    <div className="d-grid">
+    <div>
       <Button className="btn-sm" variant="danger" onClick={showModal}>
         삭제
       </Button>

@@ -5,6 +5,8 @@ import DeleteComponent from "../common/DeleteComponent";
 import { useSelector } from "react-redux";
 import { customAuthAndContentAxios } from "../../common/CustomAxiosUtils";
 import { boardsUrl } from "../../common/URL";
+import { Card, Stack } from "react-bootstrap";
+import button from "bootstrap/js/src/button";
 
 export default function ReplyDetail(props) {
   const { id } = useParams();
@@ -40,6 +42,14 @@ export default function ReplyDetail(props) {
     setUpdateState(true);
   };
 
+  const setUpdateStateToTrue = () => {
+    setUpdateState(true);
+  };
+
+  const setUpdateStateToFalse = () => {
+    setUpdateState(false);
+  };
+
   const edit = async () => {
     const replyEditRequest = {
       content: replyContent,
@@ -54,52 +64,81 @@ export default function ReplyDetail(props) {
       });
   };
 
-  function EditAndDeleteButtonComponent() {
+  const EditButton = () => {
     if (isLoggedInState && loginMemberNameState === reply.memberName) {
-      return (
-        <div className="d-grid gap-2">
-          <button
-            className="btn btn-warning btn-sm"
-            type="button"
-            onClick={update}
-          >
-            수정
+      if (updateState) {
+        return (
+          <button className="btn btn-warning btn-sm" onClick={update}>
+            수정하기
           </button>
-          <DeleteComponent
-            data={{
-              requestURL: `${boardsUrl}/${id}/replies/${reply.id}`,
-              title: "댓글 삭제",
-              id: reply.id,
-            }}
-            afterEach={props.deleteReply}
-          />
-        </div>
+        );
+      }
+      return (
+        <button
+          className="btn btn-warning btn-sm"
+          onClick={setUpdateStateToTrue}
+        >
+          수정
+        </button>
       );
     }
-  }
+  };
+
+  const DeleteButton = () => {
+    if (isLoggedInState && loginMemberNameState === reply.memberName) {
+      if (updateState) {
+        return (
+          <button
+            className="btn btn-dark btn-sm"
+            onClick={setUpdateStateToFalse}
+          >
+            취소
+          </button>
+        );
+      }
+      return (
+        <DeleteComponent
+          data={{
+            requestURL: `${boardsUrl}/${id}/replies/${reply.id}`,
+            title: "댓글 삭제",
+            id: reply.id,
+          }}
+          afterEach={props.deleteReply}
+        />
+      );
+    }
+  };
 
   return (
-    <div className="card card-body mb-2">
-      <div className="card-title">
-        <span>{reply.memberName}</span>
-      </div>
-      <div className="card-text">
-        {updateState ? (
-          <input
-            type="text"
-            value={replyContent}
-            onChange={handleChange}
-            className="comment-update-input"
-          />
-        ) : (
-          <span>{replyContent}</span>
-        )}
-      </div>
-      <div className="card-subtitle">
-        <small className="text-muted">{reply.createDate}</small>
-      </div>
-
-      <EditAndDeleteButtonComponent />
-    </div>
+    <Card className="mb-2 text-start">
+      <Card.Body>
+        <Stack className="mb-3" direction="horizontal" gap={3}>
+          <div>
+            <span className="fw-semibold">{reply.memberName}</span>
+          </div>
+          <div className="ms-auto">
+            <EditButton />
+          </div>
+          <div>
+            <DeleteButton />
+          </div>
+        </Stack>
+        <Card.Subtitle className="mb-1">
+          {updateState ? (
+            <input
+              type="text"
+              value={replyContent}
+              onChange={handleChange}
+              className="comment-update-input"
+            />
+          ) : (
+            <span>{replyContent}</span>
+          )}
+        </Card.Subtitle>
+        <Card.Subtitle className="mb-3 text-muted">
+          <small>{reply.createDate}</small>
+        </Card.Subtitle>
+      </Card.Body>
+    </Card>
   );
 }

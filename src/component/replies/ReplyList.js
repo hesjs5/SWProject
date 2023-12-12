@@ -37,7 +37,7 @@ export default function ReplyList() {
       }) // JSON-Server 에게 students data 요청
       .then((response) => response.data)
       .then((data) => {
-        console.log(data);
+        console.log("fetch replies response = ", data);
         setReplies(data.repliesResponse);
         setPaging((prevState) => {
           return {
@@ -86,6 +86,8 @@ export default function ReplyList() {
           nextPageText={"›"}
           onChange={getRepliesByPaging}
         />
+
+        <hr />
 
         <ReplyCreate />
       </div>
