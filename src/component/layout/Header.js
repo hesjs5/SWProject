@@ -30,6 +30,7 @@ export default function Header() {
         })
         .catch((error) => {
           console.log(error);
+          setLogout();
         });
     }
   }, []); // 처음 한번만 실행 됨
