@@ -9,7 +9,7 @@ export default function ReplyCreate() {
 
   function goLogin() {
     console.log("goLogin");
-    // navigate("/login");
+    navigate("/login");
   }
 
   function ReplyForm() {

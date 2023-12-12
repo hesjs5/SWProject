@@ -1,10 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import ReplyCreate from "./ReplyCreate";
-import { boardsURL } from "../../common/URL";
 import ReplyDetail from "./ReplyDetail";
 import Pagination from "react-js-pagination";
-import axios from "axios";
+import { customAxios } from "../../common/CustomAxiosUtils";
 
 export default function ReplyList() {
   const [searchParams, setSearchParams] = useSearchParams({
@@ -28,8 +27,8 @@ export default function ReplyList() {
   }, [id]);
 
   const fetchAndSetReplies = useCallback(async () => {
-    await axios
-      .get(`${boardsURL}/${id}/replies`, {
+    await customAxios
+      .get(`/boards/${id}/replies`, {
         params: {
           page: searchParams.get("page") - 1,
           size: searchParams.get("size"),

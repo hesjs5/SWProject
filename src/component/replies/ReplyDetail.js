@@ -1,10 +1,9 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { boardsURL } from "../../common/URL";
 import DeleteComponent from "../common/DeleteComponent";
-import axios from "axios";
 import { useSelector } from "react-redux";
+import { customAuthAndContentAxios } from "../../common/CustomAxiosUtils";
 
 export default function ReplyDetail(props) {
   const { id } = useParams();
@@ -44,18 +43,10 @@ export default function ReplyDetail(props) {
     const replyEditRequest = {
       content: replyContent,
     };
-    const token = localStorage.getItem("token");
-    const headersConfig = {
-      "Content-Type": "application/json",
-      Authorization: token,
-    };
-    await axios
-      .put(`${boardsURL}/${id}/replies/${reply.id}`, replyEditRequest, {
-        headers: headersConfig,
-      })
+    await customAuthAndContentAxios
+      .put(`/boards/${id}/replies/${reply.id}`, replyEditRequest)
       .then((response) => {
-        console.log("success");
-        console.log(response);
+        console.log("reply edit response = ", response);
       })
       .catch((error) => {
         console.log(error);
@@ -75,7 +66,7 @@ export default function ReplyDetail(props) {
           </button>
           <DeleteComponent
             data={{
-              requestURL: `${boardsURL}/${id}/replies/${reply.id}`,
+              requestURL: `/boards/${id}/replies/${reply.id}`,
               title: "댓글 삭제",
               id: reply.id,
             }}

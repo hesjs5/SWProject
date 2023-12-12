@@ -1,19 +1,12 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
-import axios from "axios";
+import { customAuthAndContentAxios } from "../../common/CustomAxiosUtils";
 
 export default function DeleteComponent(props) {
   const deleteRequest = async () => {
-    const token = localStorage.getItem("token");
-    const headersConfig = {
-      "Content-Type": "application/json",
-      Authorization: token,
-    };
-    await axios
-      .delete(`${props.data.requestURL}`, {
-        headers: headersConfig,
-      })
+    await customAuthAndContentAxios
+      .delete(`${props.data.requestURL}`)
       .then((response) => {
         console.log("success");
         console.log(response);

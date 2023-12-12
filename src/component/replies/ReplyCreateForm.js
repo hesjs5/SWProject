@@ -1,8 +1,7 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useParams } from "react-router-dom";
-import { boardsURL } from "../../common/URL";
-import axios from "axios";
 import { useState } from "react";
+import { customAuthAndContentAxios } from "../../common/CustomAxiosUtils";
 
 export default function ReplyCreateForm() {
   const { id } = useParams();
@@ -19,20 +18,12 @@ export default function ReplyCreateForm() {
     });
   };
 
+  // todo replyList에 생성된 값 추가하기
   const createReply = async () => {
-    const token = localStorage.getItem("token");
-    const headersConfig = {
-      "Content-Type": "application/json",
-      Authorization: token,
-    };
-
-    await axios
-      .post(`${boardsURL}/${id}/replies`, replyCreateRequest, {
-        headers: headersConfig,
-      })
+    await customAuthAndContentAxios
+      .post(`/boards/${id}/replies`, replyCreateRequest)
       .then((response) => {
-        console.log("success");
-        console.log(response);
+        console.log("createReply response = ", response);
       })
       .catch((error) => {
         console.log(error);

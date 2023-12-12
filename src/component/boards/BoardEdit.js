@@ -1,8 +1,7 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { boardsURL } from "../../common/URL";
-import axios from "axios";
 import { useState } from "react";
+import { customAuthAndContentAxios } from "../../common/CustomAxiosUtils";
 
 export default function BoardEdit() {
   const { id } = useParams();
@@ -24,16 +23,8 @@ export default function BoardEdit() {
   };
 
   const edit = async () => {
-    const token = localStorage.getItem("token");
-    const headersConfig = {
-      "Content-Type": "application/json",
-      Authorization: token,
-    };
-
-    await axios
-      .put(`${boardsURL}/${id}`, postEditRequest, {
-        headers: headersConfig,
-      })
+    await customAuthAndContentAxios
+      .put(`/boards/${id}`, postEditRequest)
       .then((response) => {
         console.log("success");
         console.log(response);

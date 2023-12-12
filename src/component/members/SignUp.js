@@ -2,8 +2,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { CardBody, Col, Form, FormLabel, Row } from "react-bootstrap";
-import axios from "axios";
-import { baseURL } from "../../common/URL";
+import { customAxios } from "../../common/CustomAxiosUtils";
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -43,13 +42,13 @@ export default function Signup() {
   });
 
   const create = async (event) => {
-    const data = new FormData();
-    data.append("memberID", formValues.memberID);
-    data.append("memberPW", formValues.memberPW);
-    data.append("memberName", formValues.memberName);
-    data.append("memberNickname", formValues.memberNickname);
+    const signUpRequest = new FormData();
+    signUpRequest.append("memberID", formValues.memberID);
+    signUpRequest.append("memberPW", formValues.memberPW);
+    signUpRequest.append("memberName", formValues.memberName);
+    signUpRequest.append("memberNickname", formValues.memberNickname);
 
-    console.log(data);
+    console.log("signUpRequest = ", signUpRequest);
 
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
@@ -61,23 +60,21 @@ export default function Signup() {
     event.stopPropagation();
     setValidated(true);
 
-    await axios
-      .post(`${baseURL}/join`, {
-        body: data,
-      })
+    await customAxios
+      .post(`/join`, signUpRequest)
       .then((res) => res.data)
       .then((data) => {
         console.log("success");
         console.log(data);
-        goHome();
+        goLogin();
       })
       .catch((error) => {
         console.log(error);
       });
   };
 
-  function goHome() {
-    navigate("/boards");
+  function goLogin() {
+    navigate("/login");
   }
 
   return (
@@ -183,7 +180,7 @@ export default function Signup() {
             >
               회원가입
             </button>
-            <button className="btn btn-dark" onClick={goHome}>
+            <button className="btn btn-dark" onClick={goLogin}>
               취소
             </button>
           </div>

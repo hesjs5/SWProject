@@ -1,10 +1,9 @@
 import { Container, Nav, Navbar } from "react-bootstrap";
-import axios from "axios";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { myLogin, myLogout } from "../../App";
 import { useNavigate } from "react-router-dom";
-import { baseURL } from "../../common/URL";
+import { customAuthAxios } from "../../common/CustomAxiosUtils";
 
 export default function Header() {
   const isLoggedInState = useSelector((state) => state.isLoggedIn);
@@ -13,12 +12,8 @@ export default function Header() {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token !== null && token.length > 0) {
-      axios
-        .get(`${baseURL}/token`, {
-          headers: {
-            Authorization: token,
-          },
-        })
+      customAuthAxios
+        .get(`/token`)
         .then((response) => response.data)
         .then((data) => {
           console.log("response data = ", data);

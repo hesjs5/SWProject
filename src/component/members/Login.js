@@ -2,10 +2,9 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { CardBody, Col, Form, FormLabel, Row } from "react-bootstrap";
-import axios from "axios";
-import { baseURL } from "../../common/URL";
 import { myLogin } from "../../App";
 import { useDispatch } from "react-redux";
+import { customAxios } from "../../common/CustomAxiosUtils";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -39,12 +38,6 @@ export default function Login() {
   });
 
   const login = async (event) => {
-    const data = new FormData();
-    data.append("memberID", formValues.memberID);
-    data.append("memberPW", formValues.memberPW);
-
-    console.log(data);
-
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
       event.preventDefault();
@@ -55,18 +48,18 @@ export default function Login() {
     event.stopPropagation();
     setValidated(true);
 
-    const params = new URLSearchParams();
-    params.append("memberID", formValues.memberID);
-    params.append("memberPW", formValues.memberPW);
+    const loginRequest = new URLSearchParams();
+    loginRequest.append("memberID", formValues.memberID);
+    loginRequest.append("memberPW", formValues.memberPW);
 
-    await axios
-      .post(`${baseURL}/login`, params)
+    await customAxios
+      .post(`/login`, loginRequest)
       .then((res) => {
         if (res.status === 200) {
           const token = res.headers["authorization"];
           localStorage.setItem("token", String(token));
-          axios.defaults.headers.common["Authorization"] = token;
           setLogin(token, formValues.memberID);
+          goHome();
         }
       })
       .catch((error) => console.log(error));

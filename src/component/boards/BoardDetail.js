@@ -2,10 +2,9 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import ReplyList from "../replies/ReplyList";
-import { boardsURL } from "../../common/URL";
 import DeleteComponent from "../common/DeleteComponent";
-import axios from "axios";
 import { useSelector } from "react-redux";
+import { customAxios } from "../../common/CustomAxiosUtils";
 
 export default function BoardDetail() {
   const { id } = useParams();
@@ -22,14 +21,17 @@ export default function BoardDetail() {
   });
 
   useEffect(() => {
-    //GET Method (default) //http://..:3000/boards?board_no=1
-    axios
-      .get(`${boardsURL}/${id}`)
-      .then((response) => response.data)
-      .then((data) => {
-        console.log(data);
-        setBoard(data);
-      });
+    const fetchAndSetBoard = async () => {
+      await customAxios
+        .get(`/boards/${id}`)
+        .then((response) => response.data)
+        .then((data) => {
+          console.log(data);
+          setBoard(data);
+        });
+    };
+
+    fetchAndSetBoard();
   }, [id]); // id가 바뀌면 실행
 
   function goEditPage() {
@@ -58,7 +60,7 @@ export default function BoardDetail() {
           </button>
           <DeleteComponent
             data={{
-              requestURL: `${boardsURL}/${id}`,
+              requestURL: `/boards/${id}`,
               title: "글 삭제",
               id: board.id,
             }}

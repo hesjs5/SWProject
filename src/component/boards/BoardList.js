@@ -1,9 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { boardsURL } from "../../common/URL";
 import Pagination from "react-js-pagination";
 import "../../css/Paging.css";
-import axios from "axios";
+import { customAxios } from "../../common/CustomAxiosUtils";
 
 export default function BoardList() {
   const [searchParams, setSearchParams] = useSearchParams({
@@ -27,8 +26,8 @@ export default function BoardList() {
   }, []); // 처음 한번만 실행 됨
 
   const fetchAndSetBoards = useCallback(async () => {
-    await axios
-      .get(`${boardsURL}`, {
+    await customAxios
+      .get("/boards", {
         params: {
           page: searchParams.get("page") - 1,
           size: searchParams.get("size"),

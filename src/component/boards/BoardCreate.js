@@ -1,8 +1,7 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { boardsURL } from "../../common/URL";
-import axios from "axios";
+import { customAuthAndContentAxios } from "../../common/CustomAxiosUtils";
 
 export default function BoardCreate() {
   const navigate = useNavigate();
@@ -21,15 +20,8 @@ export default function BoardCreate() {
   };
 
   const create = async () => {
-    const token = localStorage.getItem("token");
-    const headerConfig = {
-      "Content-Type": "application/json; charset=utf-8",
-      Authorization: token,
-    };
-    await axios
-      .post(`${boardsURL}`, postCreateRequest, {
-        headers: headerConfig,
-      })
+    await customAuthAndContentAxios
+      .post("/boards", postCreateRequest)
       .then((response) => {
         console.log("success");
         console.log(response);
