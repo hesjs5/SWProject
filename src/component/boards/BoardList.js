@@ -52,7 +52,7 @@ export default function BoardList() {
 
   const getBoardsByPaging = async (pageNumber) => {
     searchParams.set("page", pageNumber);
-    searchParams.set("size", "10");
+    searchParams.set("size", 10);
     setSearchParams(searchParams);
 
     await fetchAndSetBoards();
