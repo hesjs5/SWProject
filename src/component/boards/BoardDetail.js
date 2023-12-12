@@ -6,7 +6,7 @@ import DeleteComponent from "../common/DeleteComponent";
 import { useSelector } from "react-redux";
 import { customAxios } from "../../common/CustomAxiosUtils";
 import { boardsUrl } from "../../common/URL";
-import { Card, Container } from "react-bootstrap";
+import { Card, Container, Stack } from "react-bootstrap";
 import BoardEditButton from "./BoardEditButton";
 
 export default function BoardDetail() {
@@ -42,20 +42,23 @@ export default function BoardDetail() {
     navigate(`${boardsUrl}`);
   };
 
-  const EditAndDeleteButton = () => {
+  const EditButton = () => {
+    if (isLoggedInState && loginMemberNameState === board.memberName) {
+      return <BoardEditButton propsBoard={board} />;
+    }
+  };
+
+  const DeleteButton = () => {
     if (isLoggedInState && loginMemberNameState === board.memberName) {
       return (
-        <div className="d-grid gap-2">
-          <BoardEditButton propsBoard={board} />
-          <DeleteComponent
-            data={{
-              requestURL: `${boardsUrl}/${board.id}`,
-              title: "글 삭제",
-              id: board.id,
-            }}
-            afterEach={goBoards}
-          />
-        </div>
+        <DeleteComponent
+          data={{
+            requestURL: `${boardsUrl}/${board.id}`,
+            title: "글 삭제",
+            id: board.id,
+          }}
+          afterEach={goBoards}
+        />
       );
     }
   };
@@ -86,7 +89,10 @@ export default function BoardDetail() {
             <p id="content">{board.content}</p>
           </div>
 
-          <EditAndDeleteButton />
+          <Stack direction="horizontal" gap={3}>
+            <EditButton />
+            <DeleteButton />
+          </Stack>
 
           <hr />
 
