@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { boardsURL } from "../../common/URL";
 import Pagination from "react-js-pagination";
@@ -20,44 +20,13 @@ export default function BoardList() {
   });
 
   useEffect(() => {
-    if (!searchParams.has("page")) {
-      searchParams.append("page", "1");
-    }
-    if (!searchParams.has("size")) {
-      searchParams.append("size", "10");
-    }
     setSearchParams(searchParams);
 
     //  `${dataDomain}/boards` 로 비동기 요청
-    axios
-      .get(`${boardsURL}`, {
-        params: {
-          page: searchParams.get("page") - 1,
-          size: searchParams.get("size"),
-        },
-      }) // JSON-Server 에게 students data 요청
-      .then((response) => response.data)
-      .then((data) => {
-        console.log(data);
-        setBoards(data.postsResponse);
-        setPaging((prevState) => {
-          return {
-            ...prevState,
-            totalPages: data.totalPages,
-            totalElements: data.totalElements,
-            pageNumber: data.pageNumber,
-            pageSize: data.pageSize,
-          };
-        });
-      });
+    fetchAndSetBoards();
   }, []); // 처음 한번만 실행 됨
 
-  const getBoardsByPaging = async (pageNumber) => {
-    searchParams.set("page", pageNumber);
-    console.log("pageNumber - 1 = ", pageNumber);
-    searchParams.set("size", "10");
-    setSearchParams(searchParams);
-
+  const fetchAndSetBoards = useCallback(async () => {
     await axios
       .get(`${boardsURL}`, {
         params: {
@@ -79,6 +48,14 @@ export default function BoardList() {
           };
         });
       });
+  }, [searchParams]);
+
+  const getBoardsByPaging = async (pageNumber) => {
+    searchParams.set("page", pageNumber);
+    searchParams.set("size", "10");
+    setSearchParams(searchParams);
+
+    await fetchAndSetBoards();
   };
 
   const navigate = useNavigate();
