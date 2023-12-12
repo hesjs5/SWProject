@@ -23,6 +23,7 @@ export default function ReplyCreate() {
           className="form-control"
           rows="3"
           id="content"
+          name="content"
           defaultValue="댓글을 작성하려면 로그인 해주세요"
           disabled
           onClick={goLogin}
@@ -33,7 +34,7 @@ export default function ReplyCreate() {
 
   return (
     <div className="container" style={{ maxWidth: "1000px" }}>
-      <label htmlFor="content">댓글 작성</label>
+      <div>댓글 작성</div>
       <ReplyForm />
     </div>
   );
