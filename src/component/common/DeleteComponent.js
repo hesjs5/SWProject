@@ -8,14 +8,15 @@ export default function DeleteComponent(props) {
     await customAuthAndContentAxios
       .delete(`${props.data.requestURL}`)
       .then((response) => {
-        console.log("success");
-        console.log(response);
+        console.log("delete response = ", response);
+        props.afterEach(props.data.id);
       })
       .catch((error) => {
         console.log(error);
+      })
+      .finally(() => {
+        closeModal();
       });
-    props.afterEach(props.data.id);
-    closeModal();
   };
 
   const [modalState, setModalState] = useState(false);

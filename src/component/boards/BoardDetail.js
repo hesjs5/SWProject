@@ -6,6 +6,8 @@ import DeleteComponent from "../common/DeleteComponent";
 import { useSelector } from "react-redux";
 import { customAxios } from "../../common/CustomAxiosUtils";
 import { boardsUrl } from "../../common/URL";
+import { Card, Container } from "react-bootstrap";
+import BoardEditButton from "./BoardEditButton";
 
 export default function BoardDetail() {
   const { id } = useParams();
@@ -14,11 +16,12 @@ export default function BoardDetail() {
   const loginMemberNameState = useSelector((state) => state.memberName);
 
   const [board, setBoard] = useState({
-    // "board_no": 1,
-    // "title": null,
-    // "text": null,
-    // "mem_id": null,
-    // "count" :0
+    id: 1,
+    title: "",
+    content: "",
+    memberName: "",
+    createDate: "",
+    modifyDate: "",
   });
 
   useEffect(() => {
@@ -27,7 +30,7 @@ export default function BoardDetail() {
         .get(`${boardsUrl}/${id}`)
         .then((response) => response.data)
         .then((data) => {
-          console.log(data);
+          console.log("response data = ", data);
           setBoard(data);
         });
     };
@@ -35,33 +38,18 @@ export default function BoardDetail() {
     fetchAndSetBoard();
   }, [id]); // id가 바뀌면 실행
 
-  function goEditPage() {
-    navigate(`${boardsUrl}/${id}/edit`, {
-      state: {
-        title: `${board.title}`,
-        content: `${board.content}`,
-      },
-    });
-  }
-
-  function goBoards() {
+  const goBoards = () => {
     navigate(`${boardsUrl}`);
-  }
+  };
 
-  function EditAndDeleteButtonComponent() {
+  const EditAndDeleteButton = () => {
     if (isLoggedInState && loginMemberNameState === board.memberName) {
       return (
         <div className="d-grid gap-2">
-          <button
-            className="btn btn-warning btn-sm"
-            type="button"
-            onClick={goEditPage}
-          >
-            수정
-          </button>
+          <BoardEditButton propsBoard={board} />
           <DeleteComponent
             data={{
-              requestURL: `${boardsUrl}/${id}`,
+              requestURL: `${boardsUrl}/${board.id}`,
               title: "글 삭제",
               id: board.id,
             }}
@@ -70,19 +58,19 @@ export default function BoardDetail() {
         </div>
       );
     }
-  }
+  };
 
   return (
-    <div className="container" style={{ maxWidth: "560px" }}>
-      <div className="card border-0">
-        <div className="card-body">
-          <div className="card-title mb-3">
+    <Container style={{ maxWidth: "560px" }}>
+      <Card className="border-0">
+        <Card.Body>
+          <Card.Title className="mb-3">
             <h1 id="title">{board.title}</h1>
-          </div>
+          </Card.Title>
 
-          <div className="card-subtitle mb-2">
-            <span className="me-4" id="boardTitle">
-              {board.title}
+          <Card.Subtitle className="mb-2">
+            <span className="me-4" id="memberName">
+              {board.memberName}
             </span>
             <small className="text-muted" id="createDate">
               Create {board.createDate}
@@ -90,7 +78,7 @@ export default function BoardDetail() {
             <small className="text-muted" id="modifyDate">
               Modify {board.modifyDate}
             </small>
-          </div>
+          </Card.Subtitle>
 
           <hr />
 
@@ -98,13 +86,13 @@ export default function BoardDetail() {
             <p id="content">{board.content}</p>
           </div>
 
-          <EditAndDeleteButtonComponent />
+          <EditAndDeleteButton />
 
           <hr />
 
-          <ReplyList></ReplyList>
-        </div>
-      </div>
-    </div>
+          <ReplyList />
+        </Card.Body>
+      </Card>
+    </Container>
   );
 }
