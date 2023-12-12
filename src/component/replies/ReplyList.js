@@ -1,17 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import ReplyCreate from "./ReplyCreate";
 import ReplyDetail from "./ReplyDetail";
 import Pagination from "react-js-pagination";
 import { customAxios } from "../../common/CustomAxiosUtils";
-import { boardsUrl, page, size } from "../../common/URL";
+import { boardsUrl } from "../../common/URL";
 
 export default function ReplyList() {
-  const [searchParams, setSearchParams] = useSearchParams({
-    page: 1,
-    size: 10,
-  });
-
   const { id } = useParams();
   const [replies, setReplies] = useState([]);
   const [paging, setPaging] = useState({
@@ -21,42 +16,45 @@ export default function ReplyList() {
     pageSize: 0,
   });
 
-  useEffect(() => {
-    setSearchParams(searchParams);
+  const [page, setPage] = useState(1);
+  const [size, setSize] = useState(10);
 
-    fetchAndSetReplies();
+  useEffect(() => {
+    fetchAndSetReplies(page);
   }, [id]);
 
-  const fetchAndSetReplies = useCallback(async () => {
-    await customAxios
-      .get(`${boardsUrl}/${id}/replies`, {
-        params: {
-          page: searchParams.get(page) - 1,
-          size: searchParams.get(size),
-        },
-      }) // JSON-Server 에게 students data 요청
-      .then((response) => response.data)
-      .then((data) => {
-        console.log("fetch replies response = ", data);
-        setReplies(data.repliesResponse);
-        setPaging((prevState) => {
-          return {
-            ...prevState,
-            totalPages: data.totalPages,
-            totalElements: data.totalElements,
-            pageNumber: data.pageNumber,
-            pageSize: data.pageSize,
-          };
+  const fetchAndSetReplies = useCallback(
+    async (pageNumber) => {
+      await customAxios
+        .get(`${boardsUrl}/${id}/replies`, {
+          params: {
+            page: pageNumber - 1,
+            size: size,
+          },
+        }) // JSON-Server 에게 students data 요청
+        .then((response) => response.data)
+        .then((data) => {
+          console.log("fetch replies response = ", data);
+          setReplies(data.repliesResponse);
+          setPaging((prevState) => {
+            return {
+              ...prevState,
+              totalPages: data.totalPages,
+              totalElements: data.totalElements,
+              pageNumber: data.pageNumber,
+              pageSize: data.pageSize,
+            };
+          });
         });
-      });
-  }, [id, searchParams]);
+    },
+    [id],
+  );
 
   const getRepliesByPaging = async (pageNumber) => {
-    searchParams.set(page, pageNumber);
-    searchParams.set(size, 10);
-    setSearchParams(searchParams);
+    setPage(pageNumber);
+    setSize(10);
 
-    await fetchAndSetReplies();
+    await fetchAndSetReplies(pageNumber);
   };
 
   const deleteReply = (replyId) => {
@@ -87,8 +85,8 @@ export default function ReplyList() {
         </div>
 
         <Pagination
-          activePage={parseInt(searchParams.get(page))}
-          itemsCountPerPage={parseInt(searchParams.get(size))}
+          activePage={page}
+          itemsCountPerPage={size}
           totalItemsCount={paging.totalElements}
           pageRangeDisplayed={10}
           prevPageText={"‹"}
