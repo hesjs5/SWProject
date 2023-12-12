@@ -2,6 +2,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { useParams } from "react-router-dom";
 import { useState } from "react";
 import { customAuthAndContentAxios } from "../../common/CustomAxiosUtils";
+import { boardsUrl } from "../../common/URL";
 
 export default function ReplyCreateForm() {
   const { id } = useParams();
@@ -21,7 +22,7 @@ export default function ReplyCreateForm() {
   // todo replyList에 생성된 값 추가하기
   const createReply = async () => {
     await customAuthAndContentAxios
-      .post(`/boards/${id}/replies`, replyCreateRequest)
+      .post(`${boardsUrl}/${id}/replies`, replyCreateRequest)
       .then((response) => {
         console.log("createReply response = ", response);
       })

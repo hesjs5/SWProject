@@ -2,6 +2,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { customAuthAndContentAxios } from "../../common/CustomAxiosUtils";
+import { boardsUrl } from "../../common/URL";
 
 export default function BoardCreate() {
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ export default function BoardCreate() {
 
   const create = async () => {
     await customAuthAndContentAxios
-      .post("/boards", postCreateRequest)
+      .post(`${boardsUrl}`, postCreateRequest)
       .then((response) => {
         console.log("success");
         console.log(response);
@@ -33,7 +34,7 @@ export default function BoardCreate() {
   };
 
   function goBoards() {
-    navigate("/boards");
+    navigate(`${boardsUrl}`);
   }
 
   return (

@@ -4,6 +4,7 @@ import ReplyCreate from "./ReplyCreate";
 import ReplyDetail from "./ReplyDetail";
 import Pagination from "react-js-pagination";
 import { customAxios } from "../../common/CustomAxiosUtils";
+import { boardsUrl, page, size } from "../../common/URL";
 
 export default function ReplyList() {
   const [searchParams, setSearchParams] = useSearchParams({
@@ -28,10 +29,10 @@ export default function ReplyList() {
 
   const fetchAndSetReplies = useCallback(async () => {
     await customAxios
-      .get(`/boards/${id}/replies`, {
+      .get(`${boardsUrl}/${id}/replies`, {
         params: {
-          page: searchParams.get("page") - 1,
-          size: searchParams.get("size"),
+          page: searchParams.get(page) - 1,
+          size: searchParams.get(size),
         },
       }) // JSON-Server 에게 students data 요청
       .then((response) => response.data)
@@ -51,8 +52,8 @@ export default function ReplyList() {
   }, [id, searchParams]);
 
   const getRepliesByPaging = async (pageNumber) => {
-    searchParams.set("page", pageNumber);
-    searchParams.set("size", 10);
+    searchParams.set(page, pageNumber);
+    searchParams.set(size, 10);
     setSearchParams(searchParams);
 
     await fetchAndSetReplies();
@@ -77,8 +78,8 @@ export default function ReplyList() {
         </div>
 
         <Pagination
-          activePage={parseInt(searchParams.get("page"))}
-          itemsCountPerPage={parseInt(searchParams.get("size"))}
+          activePage={parseInt(searchParams.get(page))}
+          itemsCountPerPage={parseInt(searchParams.get(size))}
           totalItemsCount={paging.totalElements}
           pageRangeDisplayed={10}
           prevPageText={"‹"}

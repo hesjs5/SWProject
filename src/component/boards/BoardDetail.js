@@ -5,6 +5,7 @@ import ReplyList from "../replies/ReplyList";
 import DeleteComponent from "../common/DeleteComponent";
 import { useSelector } from "react-redux";
 import { customAxios } from "../../common/CustomAxiosUtils";
+import { boardsUrl } from "../../common/URL";
 
 export default function BoardDetail() {
   const { id } = useParams();
@@ -23,7 +24,7 @@ export default function BoardDetail() {
   useEffect(() => {
     const fetchAndSetBoard = async () => {
       await customAxios
-        .get(`/boards/${id}`)
+        .get(`${boardsUrl}/${id}`)
         .then((response) => response.data)
         .then((data) => {
           console.log(data);
@@ -35,7 +36,7 @@ export default function BoardDetail() {
   }, [id]); // id가 바뀌면 실행
 
   function goEditPage() {
-    navigate(`/boards/${id}/edit`, {
+    navigate(`${boardsUrl}/${id}/edit`, {
       state: {
         title: `${board.title}`,
         content: `${board.content}`,
@@ -44,7 +45,7 @@ export default function BoardDetail() {
   }
 
   function goBoards() {
-    navigate(`/boards`);
+    navigate(`${boardsUrl}`);
   }
 
   function EditAndDeleteButtonComponent() {
@@ -60,7 +61,7 @@ export default function BoardDetail() {
           </button>
           <DeleteComponent
             data={{
-              requestURL: `/boards/${id}`,
+              requestURL: `${boardsUrl}/${id}`,
               title: "글 삭제",
               id: board.id,
             }}

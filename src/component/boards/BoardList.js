@@ -3,6 +3,7 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import Pagination from "react-js-pagination";
 import "../../css/Paging.css";
 import { customAxios } from "../../common/CustomAxiosUtils";
+import { boardsUrl, page, size } from "../../common/URL";
 
 export default function BoardList() {
   const [searchParams, setSearchParams] = useSearchParams({
@@ -27,10 +28,10 @@ export default function BoardList() {
 
   const fetchAndSetBoards = useCallback(async () => {
     await customAxios
-      .get("/boards", {
+      .get(boardsUrl, {
         params: {
-          page: searchParams.get("page") - 1,
-          size: searchParams.get("size"),
+          page: searchParams.get(page) - 1,
+          size: searchParams.get(size),
         },
       }) // JSON-Server 에게 students data 요청
       .then((response) => response.data)
@@ -50,8 +51,8 @@ export default function BoardList() {
   }, [searchParams]);
 
   const getBoardsByPaging = async (pageNumber) => {
-    searchParams.set("page", pageNumber);
-    searchParams.set("size", 10);
+    searchParams.set(page, pageNumber);
+    searchParams.set(size, 10);
     setSearchParams(searchParams);
 
     await fetchAndSetBoards();
@@ -60,7 +61,7 @@ export default function BoardList() {
   const navigate = useNavigate();
 
   function goBoardCreate() {
-    navigate("/boards/create");
+    navigate(`${boardsUrl}/create`);
   }
 
   return (

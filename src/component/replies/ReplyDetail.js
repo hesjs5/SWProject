@@ -4,6 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import DeleteComponent from "../common/DeleteComponent";
 import { useSelector } from "react-redux";
 import { customAuthAndContentAxios } from "../../common/CustomAxiosUtils";
+import { boardsUrl } from "../../common/URL";
 
 export default function ReplyDetail(props) {
   const { id } = useParams();
@@ -44,7 +45,7 @@ export default function ReplyDetail(props) {
       content: replyContent,
     };
     await customAuthAndContentAxios
-      .put(`/boards/${id}/replies/${reply.id}`, replyEditRequest)
+      .put(`${boardsUrl}/${id}/replies/${reply.id}`, replyEditRequest)
       .then((response) => {
         console.log("reply edit response = ", response);
       })
@@ -66,7 +67,7 @@ export default function ReplyDetail(props) {
           </button>
           <DeleteComponent
             data={{
-              requestURL: `/boards/${id}/replies/${reply.id}`,
+              requestURL: `${boardsUrl}/${id}/replies/${reply.id}`,
               title: "댓글 삭제",
               id: reply.id,
             }}
