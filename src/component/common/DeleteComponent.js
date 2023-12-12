@@ -5,12 +5,10 @@ import axios from "axios";
 
 export default function DeleteComponent(props) {
   const deleteRequest = async () => {
-    const token = "Bearer ".concat(localStorage.getItem("token"));
+    const token = localStorage.getItem("token");
     const headersConfig = {
       "Content-Type": "application/json",
-      Authorization:
-        "Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJiQGIuY29tIiwiZXhwIjoxNzAyMDA1MDcxLCJpZCI6ImJAYi5jb20iLCJ1c2VybmFtZSI6ImIifQ.gAB05Ljc4Vk6zkDsueKSnWzqs4sX8R18Rt53vWlM2qKmUASimNtBp_CYG5RFbvcTketqldBsfDa8GQbCwvkgdA",
-      Authorization2: token,
+      Authorization: token,
     };
     await axios
       .delete(`${props.data.requestURL}`, {
