@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { myLogin, myLogout } from "../../App";
 import { useNavigate } from "react-router-dom";
+import { baseURL } from "../../common/URL";
 
 export default function Header() {
   const isLoggedInState = useSelector((state) => state.isLoggedIn);
@@ -13,21 +14,22 @@ export default function Header() {
     const token = localStorage.getItem("token");
     if (token !== null && token.length > 0) {
       axios
-        .get("http://localhost:8080/token", {
+        .get(`${baseURL}/token`, {
           headers: {
             Authorization: token,
           },
         })
-        .then((response) => {
-          console.log("response = ", response);
-          if (response.data.validate === true) {
-            setLogin(token, response.data.username);
+        .then((response) => response.data)
+        .then((data) => {
+          console.log("response data = ", data);
+          if (data.validate === false) {
+            setLogout();
           }
-          return response.data;
+
+          setLogin(token, data.username);
         })
         .catch((error) => {
           console.log(error);
-          return false;
         });
     }
   }, []); // 처음 한번만 실행 됨
