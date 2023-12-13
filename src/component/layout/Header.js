@@ -21,7 +21,7 @@ export default function Header() {
             setLogout();
           }
 
-          setLogin(token, data.username);
+          setLogin(token, data.memberID);
         })
         .catch((error) => {
           console.log(error);
@@ -30,12 +30,12 @@ export default function Header() {
     }
   }, []); // 처음 한번만 실행 됨
 
-  const setLogin = (token, memberName) => {
+  const setLogin = (token, memberID) => {
     dispatch(
       myLogin({
         token: token,
         isLoggedIn: true,
-        memberName: memberName,
+        memberID: memberID,
       }),
     );
   };

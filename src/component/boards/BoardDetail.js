@@ -2,8 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import ReplyList from "../replies/ReplyList";
-import DeleteComponent from "../common/DeleteComponent";
-import { useSelector } from "react-redux";
+import DeleteButtonComponent from "../common/DeleteButtonComponent";
 import { customAxios } from "../../common/CustomAxiosUtils";
 import { boardsUrl } from "../../common/URL";
 import { Card, Container, Stack } from "react-bootstrap";
@@ -12,14 +11,13 @@ import BoardEditButton from "./BoardEditButton";
 export default function BoardDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const isLoggedInState = useSelector((state) => state.isLoggedIn);
-  const loginMemberNameState = useSelector((state) => state.memberName);
 
   const [board, setBoard] = useState({
     id: 1,
     title: "",
     content: "",
     memberName: "",
+    memberID: "",
     createDate: "",
     modifyDate: "",
   });
@@ -40,27 +38,6 @@ export default function BoardDetail() {
 
   const goBoards = () => {
     navigate(`${boardsUrl}`);
-  };
-
-  const EditButton = () => {
-    if (isLoggedInState && loginMemberNameState === board.memberName) {
-      return <BoardEditButton propsBoard={board} />;
-    }
-  };
-
-  const DeleteButton = () => {
-    if (isLoggedInState && loginMemberNameState === board.memberName) {
-      return (
-        <DeleteComponent
-          data={{
-            requestURL: `${boardsUrl}/${board.id}`,
-            title: "글 삭제",
-            id: board.id,
-          }}
-          afterEach={goBoards}
-        />
-      );
-    }
   };
 
   return (
@@ -90,8 +67,16 @@ export default function BoardDetail() {
           </div>
 
           <Stack direction="horizontal">
-            <EditButton />
-            <DeleteButton />
+            <BoardEditButton propsBoard={board} />
+            <DeleteButtonComponent
+              data={{
+                requestURL: `${boardsUrl}/${board.id}`,
+                title: "글 삭제",
+                id: board.id,
+                memberID: board.memberID,
+              }}
+              afterEach={goBoards}
+            />
           </Stack>
 
           <hr />

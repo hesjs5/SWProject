@@ -71,12 +71,12 @@ export default function Login() {
 
   const dispatch = useDispatch();
 
-  const setLogin = (token, memberName) => {
+  const setLogin = (token, memberID) => {
     dispatch(
       myLogin({
         token: token,
         isLoggedIn: true,
-        memberName: memberName,
+        memberID: memberID,
       }),
     );
   };

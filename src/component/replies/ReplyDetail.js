@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import DeleteComponent from "../common/DeleteComponent";
+import DeleteButtonComponent from "../common/DeleteButtonComponent";
 import { useSelector } from "react-redux";
 import { customAuthAndContentAxios } from "../../common/CustomAxiosUtils";
 import { boardsUrl } from "../../common/URL";
@@ -10,7 +10,7 @@ import { Button, Card, Stack } from "react-bootstrap";
 export default function ReplyDetail(props) {
   const { id } = useParams();
   const isLoggedInState = useSelector((state) => state.isLoggedIn);
-  const loginMemberNameState = useSelector((state) => state.memberName);
+  const loginMemberIDState = useSelector((state) => state.memberID);
 
   const [reply] = useState({
     id: props.reply.id,
@@ -64,7 +64,7 @@ export default function ReplyDetail(props) {
   };
 
   const EditButton = () => {
-    if (isLoggedInState && loginMemberNameState === reply.memberName) {
+    if (isLoggedInState && loginMemberIDState === reply.memberID) {
       if (updateState) {
         return (
           <Button
@@ -89,7 +89,7 @@ export default function ReplyDetail(props) {
   };
 
   const DeleteButton = () => {
-    if (isLoggedInState && loginMemberNameState === reply.memberName) {
+    if (isLoggedInState && loginMemberIDState === reply.memberID) {
       if (updateState) {
         return (
           <Button
@@ -102,11 +102,12 @@ export default function ReplyDetail(props) {
         );
       }
       return (
-        <DeleteComponent
+        <DeleteButtonComponent
           data={{
             requestURL: `${boardsUrl}/${id}/replies/${reply.id}`,
             title: "댓글 삭제",
             id: reply.id,
+            memberID: reply.memberID,
           }}
           afterEach={props.deleteReply}
         />

@@ -3,7 +3,6 @@ import BoardList from "./component/boards/BoardList";
 import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import BoardCreate from "./component/boards/BoardCreate";
-import { createContext } from "react";
 import BoardEdit from "./component/boards/BoardEdit";
 import Signup from "./component/members/SignUp";
 import Header from "./component/layout/Header";
@@ -12,11 +11,6 @@ import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import PrivateRoute from "./common/PrivateRoute";
 import PublicRoute from "./common/PublicRoute";
-
-export const LoginContext = createContext({
-  token: "",
-  isLoggedIn: false,
-});
 
 export const myLogin = (payload) => {
   return {
@@ -34,7 +28,7 @@ export const myLogout = () => {
 const loginRedux = {
   token: "",
   isLoggedIn: false,
-  memberName: "",
+  memberID: "",
 };
 
 const myReducer = (state = loginRedux, action) => {
@@ -43,13 +37,13 @@ const myReducer = (state = loginRedux, action) => {
       return {
         token: action.payload.token,
         isLoggedIn: action.payload.isLoggedIn,
-        memberName: action.payload.memberName,
+        memberID: action.payload.memberID,
       };
     case "DO_LOGOUT":
       return {
         token: "",
         isLoggedIn: false,
-        memberName: "",
+        memberID: "",
       };
     default:
       return state;
