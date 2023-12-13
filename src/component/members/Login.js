@@ -1,9 +1,9 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useEffect, useState } from "react";
 import { CardBody, Col, Form, FormLabel, Row } from "react-bootstrap";
-import { myLogin } from "../../App";
 import { useDispatch } from "react-redux";
 import { customAxios } from "../../common/CustomAxiosUtils";
+import { myLogin } from "../../modules/actions";
 
 export default function Login() {
   const [validated, setValidated] = useState(false);

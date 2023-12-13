@@ -1,9 +1,9 @@
 import { Container, Nav, Navbar } from "react-bootstrap";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { myLogin, myLogout } from "../../App";
 import { Link, useNavigate } from "react-router-dom";
 import { customAuthAxios } from "../../common/CustomAxiosUtils";
+import { myLogin, myLogout } from "../../modules/actions";
 
 export default function Header() {
   const isLoggedInState = useSelector((state) => state.isLoggedIn);

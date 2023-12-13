@@ -8,56 +8,14 @@ import Signup from "./component/members/SignUp";
 import Header from "./component/layout/Header";
 import Login from "./component/members/Login";
 import { Provider } from "react-redux";
-import { configureStore } from "@reduxjs/toolkit";
 import PrivateRoute from "./common/PrivateRoute";
 import PublicRoute from "./common/PublicRoute";
-
-export const myLogin = (payload) => {
-  return {
-    type: "DO_LOGIN",
-    payload,
-  };
-};
-
-export const myLogout = () => {
-  return {
-    type: "DO_LOGOUT",
-  };
-};
-
-const loginRedux = {
-  isLoggedIn: false,
-  memberID: "",
-  role: "",
-};
-
-const myReducer = (state = loginRedux, action) => {
-  switch (action.type) {
-    case "DO_LOGIN":
-      return {
-        isLoggedIn: action.payload.isLoggedIn,
-        memberID: action.payload.memberID,
-        role: action.payload.role,
-      };
-    case "DO_LOGOUT":
-      return {
-        isLoggedIn: false,
-        memberID: "",
-        role: "",
-      };
-    default:
-      return state;
-  }
-};
-
-const store = configureStore({
-  reducer: myReducer,
-});
+import { myStore } from "./modules/stores";
 
 function App() {
   return (
     <div className="App">
-      <Provider store={store}>
+      <Provider store={myStore}>
         <BrowserRouter>
           <Header />
 
