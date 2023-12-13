@@ -29,7 +29,18 @@ export default function BoardDetail() {
         .then((response) => response.data)
         .then((data) => {
           console.log("response data = ", data);
-          setBoard(data);
+          // setBoard(data);
+          setBoard(() => {
+            return {
+              id: data.id,
+              title: data.title,
+              content: data.content,
+              memberName: data.memberName,
+              memberID: data.memberID,
+              createDate: new Date(data.createDate).toLocaleDateString(),
+              modifyDate: new Date(data.modifyDate).toLocaleDateString(),
+            };
+          });
         });
     };
 
@@ -48,11 +59,11 @@ export default function BoardDetail() {
             <h1 id="title">{board.title}</h1>
           </Card.Title>
 
-          <Card.Subtitle className="mb-2">
-            <span className="me-4" id="memberName">
+          <Card.Subtitle className="mb-2 text-start">
+            <span className="me-3" id="memberName">
               {board.memberName}
             </span>
-            <small className="text-muted" id="createDate">
+            <small className="me-3 text-muted" id="createDate">
               Create {board.createDate}
             </small>
             <small className="text-muted" id="modifyDate">

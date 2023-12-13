@@ -15,7 +15,7 @@ export default function ReplyDetail(props) {
   const [reply] = useState({
     id: props.reply.id,
     content: props.reply.content,
-    createDate: props.reply.createDate,
+    createDate: new Date(props.reply.createDate).toLocaleDateString(),
     boardId: props.reply.boardId,
     memberID: props.reply.memberID,
     memberName: props.reply.memberName,
