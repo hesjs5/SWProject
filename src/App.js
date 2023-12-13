@@ -26,24 +26,24 @@ export const myLogout = () => {
 };
 
 const loginRedux = {
-  token: "",
   isLoggedIn: false,
   memberID: "",
+  role: "",
 };
 
 const myReducer = (state = loginRedux, action) => {
   switch (action.type) {
     case "DO_LOGIN":
       return {
-        token: action.payload.token,
         isLoggedIn: action.payload.isLoggedIn,
         memberID: action.payload.memberID,
+        role: action.payload.role,
       };
     case "DO_LOGOUT":
       return {
-        token: "",
         isLoggedIn: false,
         memberID: "",
+        role: "",
       };
     default:
       return state;

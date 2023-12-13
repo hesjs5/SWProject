@@ -1,5 +1,4 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { CardBody, Col, Form, FormLabel, Row } from "react-bootstrap";
 import { myLogin } from "../../App";
@@ -7,13 +6,11 @@ import { useDispatch } from "react-redux";
 import { customAxios } from "../../common/CustomAxiosUtils";
 
 export default function Login() {
-  const navigate = useNavigate();
   const [validated, setValidated] = useState(false);
-  const [initialValues, setInitialValues] = useState({
+  const [formValues, setFormValues] = useState({
     memberID: "",
     memberPW: "",
   });
-  const [formValues, setFormValues] = useState(initialValues);
   const [allValidate, setAllValidate] = useState(false);
 
   const handleChange = (e) => {
@@ -29,12 +26,12 @@ export default function Login() {
     const isFormAllValidate = regTest && memberPWCheck;
     if (isFormAllValidate) {
       setAllValidate(true);
-      console.log(allValidate);
+      console.log("allValidate = ", allValidate);
       return;
     }
 
     setAllValidate(false);
-    console.log(allValidate);
+    console.log("allValidate = ", allValidate);
   });
 
   const login = async (event) => {
@@ -58,23 +55,22 @@ export default function Login() {
         if (res.status === 200) {
           const token = res.headers["authorization"];
           localStorage.setItem("token", String(token));
-          setLogin(token, formValues.memberID);
+          setLogin(formValues.memberID);
           goHome();
         }
       })
       .catch((error) => console.log(error));
   };
 
-  function goHome() {
-    navigate("/boards");
-  }
+  const goHome = () => {
+    window.location.replace("/boards");
+  };
 
   const dispatch = useDispatch();
 
-  const setLogin = (token, memberID) => {
+  const setLogin = (memberID) => {
     dispatch(
       myLogin({
-        token: token,
         isLoggedIn: true,
         memberID: memberID,
       }),
