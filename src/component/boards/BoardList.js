@@ -1,68 +1,83 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import Pagination from "react-js-pagination";
 import "../../css/Paging.css";
 import { customAxios } from "../../common/CustomAxiosUtils";
-import { boardsUrl, page, size } from "../../common/URL";
+import { boardsUrl } from "../../common/URL";
+import Pagination from "react-bootstrap/Pagination";
 
 export default function BoardList() {
   const [searchParams, setSearchParams] = useSearchParams({
     page: 1,
     size: 10,
   });
-
   const [boards, setBoards] = useState([]);
-  const [paging, setPaging] = useState({
-    totalPages: 0,
-    totalElements: 0,
-    pageNumber: 0,
-    pageSize: 0,
-  });
+  const [page, setPage] = useState(searchParams.get("page"));
+  const [pages, setPages] = useState([]);
+
+  // todo 뒤로가기 감지하기
 
   useEffect(() => {
-    setSearchParams(searchParams);
+    const fetchAndSetBoards = async () => {
+      await customAxios
+        .get(boardsUrl, {
+          params: {
+            page: page - 1,
+            size: 10,
+          },
+        }) // JSON-Server 에게 students data 요청
+        .then((response) => response.data)
+        .then((data) => {
+          console.log(data);
+          setBoards(data.postsResponse);
 
-    //  `${dataDomain}/boards` 로 비동기 요청
-    fetchAndSetBoards();
-  }, []); // 처음 한번만 실행 됨
-
-  const fetchAndSetBoards = useCallback(async () => {
-    await customAxios
-      .get(boardsUrl, {
-        params: {
-          page: searchParams.get(page) - 1,
-          size: searchParams.get(size),
-        },
-      }) // JSON-Server 에게 students data 요청
-      .then((response) => response.data)
-      .then((data) => {
-        console.log(data);
-        setBoards(data.postsResponse);
-        setPaging((prevState) => {
-          return {
-            ...prevState,
-            totalPages: data.totalPages,
-            totalElements: data.totalElements,
-            pageNumber: data.pageNumber,
-            pageSize: data.pageSize,
-          };
+          let tempPages = [];
+          for (let i = 1; i <= data.totalPages; i++) {
+            tempPages.push(i);
+          }
+          setPages(tempPages);
         });
-      });
-  }, [searchParams]);
+    };
 
-  const getBoardsByPaging = async (pageNumber) => {
-    searchParams.set(page, pageNumber);
-    searchParams.set(size, 10);
-    setSearchParams(searchParams);
-
-    await fetchAndSetBoards();
-  };
+    fetchAndSetBoards();
+  }, [page, setPage]); // 처음 한번만 실행 됨
 
   const navigate = useNavigate();
-
-  function goBoardCreate() {
+  const goBoardCreate = () => {
     navigate(`${boardsUrl}/create`);
-  }
+  };
+
+  const editPage = (pageNumber) => {
+    console.log("pageNumber = ", pageNumber);
+    setPage(pageNumber);
+
+    searchParams.set("page", pageNumber);
+    searchParams.set("size", 10);
+    setSearchParams(searchParams);
+  };
+
+  const prevPage = () => {
+    console.log("page = ", page);
+    setPage((prevState) => prevState - 1);
+  };
+
+  const nextPage = () => {
+    console.log("page = ", page);
+    setPage((prevState) => prevState + 1);
+  };
+
+  const firstPage = () => {
+    console.log("page = ", page);
+    setPage(1);
+  };
+
+  const lastPage = () => {
+    console.log("page = ", page);
+    setPage(pages.length);
+  };
+
+  const getActive = (number) => {
+    return number === Number(page);
+  };
 
   return (
     <div className="container" style={{ maxWidth: "1000px" }}>
@@ -75,6 +90,8 @@ export default function BoardList() {
       </div>
 
       <hr className="my-4" />
+
+      <div>{page}</div>
 
       <div>
         <table className="table">
@@ -103,15 +120,22 @@ export default function BoardList() {
         </table>
       </div>
 
-      <Pagination
-        activePage={parseInt(searchParams.get("page"))}
-        itemsCountPerPage={parseInt(searchParams.get("size"))}
-        totalItemsCount={paging.totalElements}
-        pageRangeDisplayed={10}
-        prevPageText={"‹"}
-        nextPageText={"›"}
-        onChange={getBoardsByPaging}
-      />
+      <Pagination className="justify-content-center">
+        <Pagination.First onClick={firstPage} />
+        <Pagination.Prev onClick={prevPage} />
+        {pages.map((number) => (
+          <Pagination.Item
+            key={number}
+            active={getActive(number)}
+            onClick={() => editPage(number)}
+          >
+            {number}
+          </Pagination.Item>
+        ))}
+
+        <Pagination.Next onClick={nextPage} />
+        <Pagination.Last onClick={lastPage} />
+      </Pagination>
     </div>
   );
 }
