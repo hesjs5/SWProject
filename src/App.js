@@ -11,6 +11,7 @@ import { Provider } from "react-redux";
 import PrivateRoute from "./common/PrivateRoute";
 import PublicRoute from "./common/PublicRoute";
 import { myStore } from "./modules/stores";
+import BoardChangeRole from "./component/boards/BoardChangeRole";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
 
             <Route element={<PrivateRoute />}>
               <Route path="/boards/create" element={<BoardCreate />} />
+              <Route path="/boards/users/roles" element={<BoardChangeRole />} />
               <Route path="/boards/:id/edit" element={<BoardEdit />} />
             </Route>
           </Routes>

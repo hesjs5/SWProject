@@ -24,8 +24,7 @@ export default function BoardCreate() {
     await customAuthAndContentAxios
       .post(`${boardsUrl}`, postCreateRequest)
       .then((response) => {
-        console.log("success");
-        console.log(response);
+        console.log("board create response = ", response);
         goBoards();
       })
       .catch((error) => {

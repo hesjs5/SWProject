@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "../../css/Paging.css";
 import { customAxios } from "../../common/CustomAxiosUtils";
 import { boardsUrl } from "../../common/URL";
+import BoardCreateButton from "./BoardCreateButton";
 
 export default function BoardList() {
   const [boards, setBoards] = useState([]);
@@ -19,7 +20,7 @@ export default function BoardList() {
         }) // JSON-Server 에게 students data 요청
         .then((response) => response.data)
         .then((data) => {
-          console.log(data);
+          console.log("boardList response.data = ", data);
           setBoards((prevState) => {
             return prevState.concat(data.postsResponse);
           });
@@ -29,24 +30,13 @@ export default function BoardList() {
     fetchAndSetBoards();
   }, [page, setPage]); // 처음 한번만 실행 됨
 
-  const navigate = useNavigate();
-  const goBoardCreate = () => {
-    navigate(`${boardsUrl}/create`);
-  };
-
   const loadMore = async () => {
     setPage((prevState) => prevState + 1);
   };
 
   return (
     <div className="container" style={{ maxWidth: "1000px" }}>
-      <div className="row">
-        <div className="col">
-          <button className="btn btn-primary float-end" onClick={goBoardCreate}>
-            글 등록
-          </button>
-        </div>
-      </div>
+      <BoardCreateButton />
 
       <hr className="my-4" />
 
