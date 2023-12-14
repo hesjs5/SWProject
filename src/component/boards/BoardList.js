@@ -1,20 +1,12 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../../css/Paging.css";
 import { customAxios } from "../../common/CustomAxiosUtils";
 import { boardsUrl } from "../../common/URL";
-import Pagination from "react-bootstrap/Pagination";
 
 export default function BoardList() {
-  const [searchParams, setSearchParams] = useSearchParams({
-    page: 1,
-    size: 10,
-  });
   const [boards, setBoards] = useState([]);
-  const [page, setPage] = useState(searchParams.get("page"));
-  const [pages, setPages] = useState([]);
-
-  // todo 뒤로가기 감지하기
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     const fetchAndSetBoards = async () => {
@@ -28,13 +20,9 @@ export default function BoardList() {
         .then((response) => response.data)
         .then((data) => {
           console.log(data);
-          setBoards(data.postsResponse);
-
-          let tempPages = [];
-          for (let i = 1; i <= data.totalPages; i++) {
-            tempPages.push(i);
-          }
-          setPages(tempPages);
+          setBoards((prevState) => {
+            return prevState.concat(data.postsResponse);
+          });
         });
     };
 
@@ -46,43 +34,8 @@ export default function BoardList() {
     navigate(`${boardsUrl}/create`);
   };
 
-  const editPage = (pageNumber) => {
-    console.log("pageNumber = ", pageNumber);
-    setPage(pageNumber);
-
-    searchParams.set("page", pageNumber);
-    searchParams.set("size", 10);
-    setSearchParams(searchParams);
-  };
-
-  const prevPage = () => {
-    if (page === 1) {
-      return;
-    }
-    console.log("page = ", page);
-    setPage((prevState) => prevState - 1);
-  };
-
-  const nextPage = () => {
-    if (page === pages.length) {
-      return;
-    }
-    console.log("page = ", page);
+  const loadMore = async () => {
     setPage((prevState) => prevState + 1);
-  };
-
-  const firstPage = () => {
-    console.log("page = ", page);
-    setPage(1);
-  };
-
-  const lastPage = () => {
-    console.log("page = ", page);
-    setPage(pages.length);
-  };
-
-  const getActive = (number) => {
-    return number === Number(page);
   };
 
   return (
@@ -96,8 +49,6 @@ export default function BoardList() {
       </div>
 
       <hr className="my-4" />
-
-      <div>{page}</div>
 
       <div>
         <table className="table">
@@ -126,22 +77,9 @@ export default function BoardList() {
         </table>
       </div>
 
-      <Pagination className="justify-content-center">
-        <Pagination.First onClick={firstPage} />
-        <Pagination.Prev onClick={prevPage} />
-        {pages.map((number) => (
-          <Pagination.Item
-            key={number}
-            active={getActive(number)}
-            onClick={() => editPage(number)}
-          >
-            {number}
-          </Pagination.Item>
-        ))}
-
-        <Pagination.Next onClick={nextPage} />
-        <Pagination.Last onClick={lastPage} />
-      </Pagination>
+      <button className="btn btn-dark mb-3" onClick={loadMore}>
+        LOAD MORE
+      </button>
     </div>
   );
 }
