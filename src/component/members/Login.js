@@ -4,6 +4,7 @@ import { CardBody, Col, Form, FormLabel, Row } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { customAxios } from "../../common/CustomAxiosUtils";
 import { myLogin } from "../../modules/actions";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   const [validated, setValidated] = useState(false);
@@ -62,8 +63,9 @@ export default function Login() {
       .catch((error) => console.log(error));
   };
 
+  const navigate = useNavigate();
   const goHome = () => {
-    window.location.replace("/boards");
+    navigate("/boards");
   };
 
   const dispatch = useDispatch();
