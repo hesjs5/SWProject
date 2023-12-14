@@ -3,10 +3,12 @@ import { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import { customAuthAndContentAxios } from "../../common/CustomAxiosUtils";
 import { useSelector } from "react-redux";
+import { isAdmin, isOwner } from "../../common/utils";
 
 export default function DeleteButtonComponent(props) {
   const isLoggedInState = useSelector((state) => state.isLoggedIn);
   const loginMemberIDState = useSelector((state) => state.memberID);
+  const roleState = useSelector((state) => state.role);
 
   const deleteRequest = async () => {
     await customAuthAndContentAxios
@@ -28,7 +30,10 @@ export default function DeleteButtonComponent(props) {
   const showModal = () => setModalState(true);
 
   const ButtonComponent = () => {
-    if (isLoggedInState && loginMemberIDState === props.data.memberID) {
+    if (
+      isOwner(loginMemberIDState, props.data.memberID) ||
+      isAdmin(roleState)
+    ) {
       return (
         <Button
           className="btn-sm text-decoration-none text-danger"

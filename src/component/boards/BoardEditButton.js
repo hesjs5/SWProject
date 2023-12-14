@@ -4,11 +4,13 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { boardsUrl } from "../../common/URL";
 import { Button } from "react-bootstrap";
 import { useSelector } from "react-redux";
+import { isAdmin, isOwner } from "../../common/utils";
 
 export default function BoardEditButton({ propsBoard }) {
   const navigate = useNavigate();
   const isLoggedInState = useSelector((state) => state.isLoggedIn);
   const loginMemberIDState = useSelector((state) => state.memberID);
+  const roleState = useSelector((state) => state.role);
 
   const [board, setBoard] = useState({
     id: 1,
@@ -24,17 +26,17 @@ export default function BoardEditButton({ propsBoard }) {
     setBoard(propsBoard);
   }, [setBoard, propsBoard]);
 
-  function goEditPage() {
+  const goEditPage = () => {
     navigate(`${boardsUrl}/${board.id}/edit`, {
       state: {
         title: `${board.title}`,
         content: `${board.content}`,
       },
     });
-  }
+  };
 
   const EditButtonComponent = () => {
-    if (isLoggedInState && board.memberID === loginMemberIDState) {
+    if (isOwner(board.memberID, loginMemberIDState) || isAdmin(roleState)) {
       return (
         <Button
           className="btn-sm text-decoration-none text-success"

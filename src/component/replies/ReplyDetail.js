@@ -6,11 +6,13 @@ import { useSelector } from "react-redux";
 import { customAuthAndContentAxios } from "../../common/CustomAxiosUtils";
 import { boardsUrl } from "../../common/URL";
 import { Button, Card, Stack } from "react-bootstrap";
+import { isAdmin, isOwner } from "../../common/utils";
 
 export default function ReplyDetail(props) {
   const { id } = useParams();
   const isLoggedInState = useSelector((state) => state.isLoggedIn);
   const loginMemberIDState = useSelector((state) => state.memberID);
+  const roleState = useSelector((state) => state.role);
 
   const [reply] = useState({
     id: props.reply.id,
@@ -64,7 +66,7 @@ export default function ReplyDetail(props) {
   };
 
   const EditButton = () => {
-    if (isLoggedInState && loginMemberIDState === reply.memberID) {
+    if (isOwner(loginMemberIDState, reply.memberID) || isAdmin(roleState)) {
       if (updateState) {
         return (
           <Button
@@ -89,7 +91,7 @@ export default function ReplyDetail(props) {
   };
 
   const DeleteButton = () => {
-    if (isLoggedInState && loginMemberIDState === reply.memberID) {
+    if (isOwner(loginMemberIDState, reply.memberID) || isAdmin(roleState)) {
       if (updateState) {
         return (
           <Button

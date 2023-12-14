@@ -31,13 +31,13 @@ export default function BoardEdit() {
         goBoard();
       })
       .catch((error) => {
-        console.log(error);
+        console.log("board edit error = ", error);
       });
   };
 
-  function goBoard() {
+  const goBoard = () => {
     navigate(`${boardsUrl}/${id}`);
-  }
+  };
 
   return (
     <div className="container" style={{ maxWidth: "560px" }}>
