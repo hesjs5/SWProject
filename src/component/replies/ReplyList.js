@@ -1,34 +1,24 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import ReplyCreate from "./ReplyCreate";
 import ReplyDetail from "./ReplyDetail";
-import Pagination from "react-js-pagination";
 import { customAxios } from "../../common/CustomAxiosUtils";
 import { boardsUrl } from "../../common/URL";
+import CustomPagination from "../common/CustomPagination";
 
 export default function ReplyList() {
   const { id } = useParams();
   const [replies, setReplies] = useState([]);
-  const [paging, setPaging] = useState({
-    totalPages: 0,
-    totalElements: 0,
-    pageNumber: 0,
-    pageSize: 0,
-  });
-
   const [page, setPage] = useState(1);
   const [size, setSize] = useState(10);
+  const [totalElements, setTotalElements] = useState(0);
 
   useEffect(() => {
-    fetchAndSetReplies(page);
-  }, [id]);
-
-  const fetchAndSetReplies = useCallback(
-    async (pageNumber) => {
+    const fetchAndSetReplies = async () => {
       await customAxios
         .get(`${boardsUrl}/${id}/replies`, {
           params: {
-            page: pageNumber - 1,
+            page: page - 1,
             size: size,
           },
         }) // JSON-Server 에게 students data 요청
@@ -36,26 +26,12 @@ export default function ReplyList() {
         .then((data) => {
           console.log("fetch replies response = ", data);
           setReplies(data.repliesResponse);
-          setPaging((prevState) => {
-            return {
-              ...prevState,
-              totalPages: data.totalPages,
-              totalElements: data.totalElements,
-              pageNumber: data.pageNumber,
-              pageSize: data.pageSize,
-            };
-          });
+          setTotalElements(data.totalElements);
         });
-    },
-    [id],
-  );
+    };
 
-  const getRepliesByPaging = async (pageNumber) => {
-    setPage(pageNumber);
-    setSize(10);
-
-    await fetchAndSetReplies(pageNumber);
-  };
+    fetchAndSetReplies();
+  }, [id, page, setPage]);
 
   const deleteReply = (replyId) => {
     const newReplies = replies.filter((reply) => reply.id !== replyId);
@@ -84,14 +60,13 @@ export default function ReplyList() {
           ))}
         </div>
 
-        <Pagination
-          activePage={page}
-          itemsCountPerPage={size}
-          totalItemsCount={paging.totalElements}
-          pageRangeDisplayed={10}
-          prevPageText={"‹"}
-          nextPageText={"›"}
-          onChange={getRepliesByPaging}
+        <CustomPagination
+          page={page}
+          setPage={setPage}
+          totalElements={totalElements}
+          setReplies={setReplies}
+          size={size}
+          setSize={setSize}
         />
 
         <ReplyCreate createReply={createReply} />

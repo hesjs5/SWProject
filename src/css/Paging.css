@@ -1,62 +1,62 @@
-/*.pagination {*/
-/*    display: flex;*/
-/*    justify-content: center;*/
-/*    margin-top: 15px;*/
-/*}*/
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+}
 
-/*ul {*/
-/*    list-style: none;*/
-/*    padding: 0;*/
-/*}*/
+ul {
+    list-style: none;
+    padding: 0;
+}
 
-/*ul.pagination li {*/
-/*    width: 40px;*/
-/*    height: 40px;*/
-/*    border: 1px solid #e2e2e2;*/
-/*    display: flex;*/
-/*    justify-content: center;*/
-/*    align-items: center;*/
-/*    font-size: 1rem;*/
-/*    cursor: pointer;*/
-/*}*/
+ul.pagination li {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #e2e2e2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1rem;
+    cursor: pointer;
+}
 
-/*ul.pagination li:first-child{*/
-/*    border-top-left-radius: 5px;*/
-/*    border-bottom-left-radius: 5px;*/
-/*}*/
+ul.pagination li:first-child {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
 
-/*ul.pagination li:last-child{*/
-/*    border-top-right-radius: 5px;*/
-/*    border-bottom-right-radius: 5px;*/
-/*}*/
+ul.pagination li:last-child {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
 
-/*ul.pagination li a {*/
-/*    text-decoration: none;*/
-/*    color: #0d6efd;*/
-/*    font-size: 1rem;*/
-/*}*/
+ul.pagination li a {
+    text-decoration: none;
+    color: #0d6efd;
+    font-size: 1rem;
+}
 
-/*ul.pagination li:hover{*/
-/*    background-color: #dee2e6;*/
+ul.pagination li:hover {
+    background-color: #dee2e6;
 
-/*}*/
+}
 
-/*ul.pagination li.active a {*/
-/*    color: white;*/
-/*}*/
+ul.pagination li.active a {
+    color: white;
+}
 
-/*ul.pagination li.active {*/
-/*    background-color: #0d6efd;*/
-/*    border: 1px solid #0d6efd;*/
-/*}*/
+ul.pagination li.active {
+    background-color: #0d6efd;
+    border: 1px solid #0d6efd;
+}
 
-/*ul.pagination li a:hover,*/
-/*ul.pagination li a.active {*/
-/*    color: blue;*/
-/*}*/
+ul.pagination li a:hover,
+ul.pagination li a.active {
+    color: blue;
+}
 
-/*.page-selection {*/
-/*    width: 48px;*/
-/*    height: 30px;*/
-/*    color: #0d6efd;*/
-/*}*/
+.page-selection {
+    width: 48px;
+    height: 30px;
+    color: #0d6efd;
+}
