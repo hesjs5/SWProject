@@ -76,7 +76,7 @@ export default function Header() {
     <div className="pb-5">
       <Navbar bg="dark" data-bs-theme="dark" sticky="top">
         <Container>
-          <Navbar.Brand href="/boards">
+          <Navbar.Brand as={Link} to="/boards">
             <img
               src="/logo192.png"
               width="30"
