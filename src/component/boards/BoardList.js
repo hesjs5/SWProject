@@ -56,11 +56,17 @@ export default function BoardList() {
   };
 
   const prevPage = () => {
+    if (page === 1) {
+      return;
+    }
     console.log("page = ", page);
     setPage((prevState) => prevState - 1);
   };
 
   const nextPage = () => {
+    if (page === pages.length) {
+      return;
+    }
     console.log("page = ", page);
     setPage((prevState) => prevState + 1);
   };
