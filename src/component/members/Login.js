@@ -3,8 +3,9 @@ import { useEffect, useState } from "react";
 import { CardBody, Col, Form, FormLabel, Row } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { customAxios } from "../../common/CustomAxiosUtils";
-import { myLogin } from "../../modules/actions";
+import { myLogin, myLogout } from "../../modules/actions";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export default function Login() {
   const [validated, setValidated] = useState(false);
@@ -56,9 +57,30 @@ export default function Login() {
         if (res.status === 200) {
           const token = res.headers["authorization"];
           localStorage.setItem("token", String(token));
-          setLogin(formValues.memberID);
-          goHome();
+          return res;
         }
+      })
+      .then(async (res) => {
+        await axios
+          .get("http://localhost:8080/token", {
+            headers: {
+              Authorization: localStorage.getItem("token"),
+            },
+          })
+          .then((response) => response.data)
+          .then((data) => {
+            if (data.validate === false) {
+              setLogout();
+              return;
+            }
+
+            setLogin(data.memberID, data.role);
+            goHome();
+          })
+          .catch((error) => {
+            console.log(error);
+            setLogout();
+          });
       })
       .catch((error) => console.log(error));
   };
@@ -70,13 +92,19 @@ export default function Login() {
 
   const dispatch = useDispatch();
 
-  const setLogin = (memberID) => {
+  const setLogin = (memberID, role) => {
     dispatch(
       myLogin({
         isLoggedIn: true,
         memberID: memberID,
+        role: role,
       }),
     );
+  };
+
+  const setLogout = () => {
+    localStorage.removeItem("token");
+    dispatch(myLogout());
   };
 
   return (
