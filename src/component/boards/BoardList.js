@@ -8,6 +8,7 @@ import BoardCreateButton from "./BoardCreateButton";
 export default function BoardList() {
   const [boards, setBoards] = useState([]);
   const [page, setPage] = useState(1);
+  const [canLoad, setCanLoad] = useState(true);
 
   useEffect(() => {
     const fetchAndSetBoards = async () => {
@@ -20,6 +21,11 @@ export default function BoardList() {
         }) // JSON-Server 에게 students data 요청
         .then((response) => response.data)
         .then((data) => {
+          if (data.postsResponse.length === 0) {
+            setCanLoad(false);
+            return;
+          }
+
           console.log("boardList response.data = ", data);
           setBoards((prevState) => {
             return prevState.concat(data.postsResponse);
@@ -31,7 +37,9 @@ export default function BoardList() {
   }, [page, setPage]); // 처음 한번만 실행 됨
 
   const loadMore = async () => {
-    setPage((prevState) => prevState + 1);
+    if (canLoad) {
+      setPage((prevState) => prevState + 1);
+    }
   };
 
   return (
@@ -67,7 +75,11 @@ export default function BoardList() {
         </table>
       </div>
 
-      <button className="btn btn-dark mb-3" onClick={loadMore}>
+      <button
+        className="btn btn-dark mb-3"
+        onClick={loadMore}
+        disabled={!canLoad}
+      >
         LOAD MORE
       </button>
     </div>
