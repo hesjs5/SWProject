@@ -7,6 +7,7 @@ import { myLogin, myLogout } from "../../modules/actions";
 
 export default function Header() {
   const isLoggedInState = useSelector((state) => state.isLoggedIn);
+  const roleState = useSelector((state) => state.role);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -17,11 +18,6 @@ export default function Header() {
         .then((response) => response.data)
         .then((data) => {
           console.log("response data = ", data);
-          if (data.validate === false) {
-            setLogout();
-            return;
-          }
-
           setLogin(data.memberID, data.role);
         })
         .catch((error) => {
@@ -48,18 +44,11 @@ export default function Header() {
     navigate("/boards");
   };
 
-  const LoginComponent = () => {
-    if (isLoggedInState) {
-      return (
-        <Nav>
-          <Nav.Link as={Link} to="/myPage">
-            My page
-          </Nav.Link>
-          <Nav.Link onClick={setLogout}>Sign out</Nav.Link>
-        </Nav>
-      );
-    }
+  const isNotLoggedIn = () => {
+    return !isLoggedInState;
+  };
 
+  const notLoggedInComponent = () => {
     return (
       <Nav>
         <Nav.Link as={Link} to="/signup">
@@ -70,6 +59,44 @@ export default function Header() {
         </Nav.Link>
       </Nav>
     );
+  };
+
+  const isAdmin = () => {
+    return roleState === "ADMIN";
+  };
+
+  const adminComponent = () => {
+    return (
+      <Nav>
+        <Nav.Link as={Link} to="/adminPage">
+          Admin page
+        </Nav.Link>
+        <Nav.Link onClick={setLogout}>Sign out</Nav.Link>
+      </Nav>
+    );
+  };
+
+  const loggedInComponent = () => {
+    return (
+      <Nav>
+        <Nav.Link as={Link} to="/myPage">
+          My page
+        </Nav.Link>
+        <Nav.Link onClick={setLogout}>Sign out</Nav.Link>
+      </Nav>
+    );
+  };
+
+  const LoginComponent = () => {
+    if (isNotLoggedIn()) {
+      return notLoggedInComponent();
+    }
+
+    if (isAdmin()) {
+      return adminComponent();
+    }
+
+    return loggedInComponent();
   };
 
   return (
