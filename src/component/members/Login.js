@@ -69,11 +69,6 @@ export default function Login() {
           })
           .then((response) => response.data)
           .then((data) => {
-            if (data.validate === false) {
-              setLogout();
-              return;
-            }
-
             setLogin(data.memberID, data.role);
             goHome();
           })
