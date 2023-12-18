@@ -1,18 +1,16 @@
 import axios, {AxiosInstance} from "axios";
+import {baseURL} from "./URL";
 
-const baseURL = "http://localhost:8080";
 const tokenStorageKey = "token";
 
 const customAxios: AxiosInstance = axios.create({
     baseURL: baseURL,
 })
 
-const token = localStorage.getItem(tokenStorageKey);
-
 const customAuthAxios: AxiosInstance = axios.create({
     baseURL: baseURL,
     headers: {
-        Authorization: token,
+        Authorization: localStorage.getItem(tokenStorageKey),
     }
 })
 
@@ -20,7 +18,7 @@ const customAuthAndContentAxios: AxiosInstance = axios.create({
     baseURL: baseURL,
     headers: {
         "Content-Type": "application/json",
-        Authorization: token,
+        Authorization: localStorage.getItem(tokenStorageKey),
     }
 })
 
