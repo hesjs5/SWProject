@@ -2,10 +2,11 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { useEffect, useState } from "react";
 import { CardBody, Col, Form, FormLabel, Row } from "react-bootstrap";
 import { useDispatch } from "react-redux";
-import { customAuthAxios, customAxios } from "../../common/CustomAxiosUtils";
+import { customAxios } from "../../common/CustomAxiosUtils";
 import { myLogin, myLogout } from "../../modules/actions";
 import { useNavigate } from "react-router-dom";
 import { baseURL } from "../../common/URL";
+import axios from "axios";
 
 export default function Login() {
   const [validated, setValidated] = useState(false);
@@ -61,8 +62,12 @@ export default function Login() {
         }
       })
       .then(async (res) => {
-        await customAuthAxios
-          .get(`${baseURL}/token`)
+        await axios
+          .get(`${baseURL}/token`, {
+            headers: {
+              Authorization: localStorage.getItem("token"),
+            },
+          })
           .then((response) => response.data)
           .then((data) => {
             setLogin(data.memberID, data.role);
