@@ -4,7 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { boardsUrl } from "../../common/URL";
 import { Button } from "react-bootstrap";
 import { useSelector } from "react-redux";
-import { isAdmin, isOwner } from "../../common/utils";
+import { isOwner } from "../../common/utils";
 
 export default function BoardEditButton({ propsBoard }) {
   const navigate = useNavigate();
@@ -36,7 +36,7 @@ export default function BoardEditButton({ propsBoard }) {
   };
 
   const EditButtonComponent = () => {
-    if (isOwner(board.memberID, loginMemberIDState) || isAdmin(roleState)) {
+    if (isOwner(board.memberID, loginMemberIDState)) {
       return (
         <Button
           className="btn-sm text-decoration-none text-success"

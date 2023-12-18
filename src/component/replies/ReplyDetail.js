@@ -66,7 +66,7 @@ export default function ReplyDetail(props) {
   };
 
   const EditButton = () => {
-    if (isOwner(loginMemberIDState, reply.memberID) || isAdmin(roleState)) {
+    if (isOwner(loginMemberIDState, reply.memberID)) {
       if (updateState) {
         return (
           <Button
