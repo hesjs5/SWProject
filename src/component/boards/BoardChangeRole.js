@@ -61,6 +61,19 @@ export default function BoardChangeRole() {
 
       <div className="row mb-3">
         <label className="col-sm-2 col-form-label" htmlFor="changeRole">
+          현재 권한
+        </label>
+        <div className="col-sm-10">
+          <Form.Control
+            name="currentRole"
+            id="currentRole"
+            type="text"
+            value={roleState}
+            disabled
+          />
+        </div>
+
+        <label className="col-sm-2 col-form-label" htmlFor="changeRole">
           변경할 권한
         </label>
         <div className="col-sm-10">
