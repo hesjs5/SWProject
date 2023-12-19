@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { boardsUrl } from "../../common/URL";
+import { boardsUrl } from "../../common/Constant";
 import { Dropdown, DropdownButton } from "react-bootstrap";
 
 export default function BoardCreateButton() {

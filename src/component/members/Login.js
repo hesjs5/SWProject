@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { customAxios } from "../../common/CustomAxiosUtils";
 import { myLogin, myLogout } from "../../modules/actions";
 import { useNavigate } from "react-router-dom";
-import { baseURL } from "../../common/URL";
+import { baseURL } from "../../common/Constant";
 import axios from "axios";
 
 export default function Login() {

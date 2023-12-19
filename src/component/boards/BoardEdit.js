@@ -2,7 +2,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
 import { customAuthAndContentAxios } from "../../common/CustomAxiosUtils";
-import { boardsUrl } from "../../common/URL";
+import { boardsUrl } from "../../common/Constant";
 
 export default function BoardEdit() {
   const { id } = useParams();

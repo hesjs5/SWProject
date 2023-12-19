@@ -4,7 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import ReplyList from "../replies/ReplyList";
 import DeleteButtonComponent from "../common/DeleteButtonComponent";
 import { customAxios } from "../../common/CustomAxiosUtils";
-import { boardsUrl } from "../../common/URL";
+import { boardsUrl } from "../../common/Constant";
 import { Card, Container, Stack } from "react-bootstrap";
 import BoardEditButton from "./BoardEditButton";
 

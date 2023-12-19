@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "../../css/Paging.css";
 import { customAxios } from "../../common/CustomAxiosUtils";
-import { boardsUrl } from "../../common/URL";
+import { boardsUrl } from "../../common/Constant";
 import BoardCreateButton from "./BoardCreateButton";
 
 export default function BoardList() {

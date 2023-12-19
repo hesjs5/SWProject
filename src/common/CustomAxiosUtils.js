@@ -1,5 +1,5 @@
 import axios, {AxiosInstance} from "axios";
-import {baseURL} from "./URL";
+import {baseURL} from "./Constant";
 
 const tokenStorageKey = "token";
 

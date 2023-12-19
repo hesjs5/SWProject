@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { boardsUrl } from "../../common/URL";
+import { boardsUrl } from "../../common/Constant";
 import { Button } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { isOwner } from "../../common/utils";

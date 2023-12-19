@@ -69,7 +69,7 @@ export default function Signup() {
         goLogin();
       })
       .catch((error) => {
-        console.log(error);
+        console.log("SignUp error = ", error);
       });
   };
 

@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import ReplyCreate from "./ReplyCreate";
 import ReplyDetail from "./ReplyDetail";
 import { customAxios } from "../../common/CustomAxiosUtils";
-import { boardsUrl } from "../../common/URL";
+import { boardsUrl } from "../../common/Constant";
 import CustomPagination from "../common/CustomPagination";
 
 export default function ReplyList() {

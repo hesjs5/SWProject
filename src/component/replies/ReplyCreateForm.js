@@ -2,7 +2,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { useParams } from "react-router-dom";
 import { useState } from "react";
 import { customAuthAndContentAxios } from "../../common/CustomAxiosUtils";
-import { boardsUrl } from "../../common/URL";
+import { boardsUrl } from "../../common/Constant";
 import { Button, Form, Stack } from "react-bootstrap";
 
 export default function ReplyCreateForm(props) {

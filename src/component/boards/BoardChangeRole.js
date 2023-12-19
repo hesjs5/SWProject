@@ -1,7 +1,7 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { boardsUrl } from "../../common/URL";
+import { boardsUrl } from "../../common/Constant";
 import { Form } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { customAuthAndContentAxios } from "../../common/CustomAxiosUtils";

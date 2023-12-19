@@ -4,7 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import DeleteButtonComponent from "../common/DeleteButtonComponent";
 import { useSelector } from "react-redux";
 import { customAuthAndContentAxios } from "../../common/CustomAxiosUtils";
-import { boardsUrl } from "../../common/URL";
+import { boardsUrl } from "../../common/Constant";
 import { Button, Card, Stack } from "react-bootstrap";
 import { isAdmin, isOwner } from "../../common/utils";
 
