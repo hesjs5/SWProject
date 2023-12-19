@@ -41,6 +41,10 @@ export default function BoardDetail() {
               modifyDate: new Date(data.modifyDate).toLocaleDateString(),
             };
           });
+        })
+        .catch((error) => {
+          console.log("fetchAndSetBoard response error = ", error);
+          alert(error.response.data.message);
         });
     };
 

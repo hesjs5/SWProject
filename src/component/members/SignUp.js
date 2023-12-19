@@ -70,6 +70,7 @@ export default function Signup() {
       })
       .catch((error) => {
         console.log("SignUp error = ", error);
+        alert(error.response.data.message);
       });
   };
 

@@ -74,11 +74,15 @@ export default function Login() {
             goHome();
           })
           .catch((error) => {
-            console.log(error);
+            console.log("token response error = ", error);
+            alert(error.response.data.message);
             setLogout();
           });
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        console.log("login response error = ", error);
+        alert(error.response.data.message);
+      });
   };
 
   const navigate = useNavigate();

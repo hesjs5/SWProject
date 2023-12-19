@@ -28,7 +28,12 @@ export default function BoardCreate() {
         goBoards();
       })
       .catch((error) => {
-        console.log(error);
+        console.log("board create response error = ", error);
+        alert(error.response.data.message);
+        setPostCreateRequest({
+          title: "",
+          content: "",
+        });
       });
   };
 

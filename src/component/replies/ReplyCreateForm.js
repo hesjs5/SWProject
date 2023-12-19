@@ -28,7 +28,8 @@ export default function ReplyCreateForm(props) {
         props.createReply(response.data);
       })
       .catch((error) => {
-        console.log(error);
+        console.log("reply create response error", error);
+        alert(error.response.data.message);
       });
   };
 

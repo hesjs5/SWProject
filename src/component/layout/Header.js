@@ -21,7 +21,8 @@ export default function Header() {
           setLogin(data.memberID, data.role);
         })
         .catch((error) => {
-          console.log(error);
+          console.log("toke response error = ", error);
+          alert(error.response.data.message);
           setLogout();
         });
     }

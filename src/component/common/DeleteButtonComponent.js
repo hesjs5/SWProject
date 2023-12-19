@@ -18,7 +18,8 @@ export default function DeleteButtonComponent(props) {
         props.afterEach(props.data.id);
       })
       .catch((error) => {
-        console.log(error);
+        console.log("delete response error = ", error);
+        alert(error.response.data.message);
       })
       .finally(() => {
         closeModal();

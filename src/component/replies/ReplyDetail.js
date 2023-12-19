@@ -61,7 +61,8 @@ export default function ReplyDetail(props) {
         console.log("reply edit response = ", response);
       })
       .catch((error) => {
-        console.log(error);
+        console.log("reply edit response error = ", error);
+        alert(error.response.data.message);
       });
   };
 
@@ -73,6 +74,7 @@ export default function ReplyDetail(props) {
             className="btn-sm text-decoration-none text-success"
             variant="link"
             onClick={update}
+            disabled={replyContent.length <= 0}
           >
             수정하기
           </Button>

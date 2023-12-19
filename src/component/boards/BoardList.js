@@ -30,6 +30,10 @@ export default function BoardList() {
           setBoards((prevState) => {
             return prevState.concat(data.postsResponse);
           });
+        })
+        .catch((error) => {
+          console.log("fetchAndSetBoards response error = ", error);
+          alert(error.response.data.message);
         });
     };
 

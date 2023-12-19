@@ -31,7 +31,8 @@ export default function BoardEdit() {
         goBoard();
       })
       .catch((error) => {
-        console.log("board edit error = ", error);
+        console.log("board edit response error = ", error);
+        alert(error.response.data.message);
       });
   };
 

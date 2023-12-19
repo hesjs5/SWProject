@@ -27,6 +27,10 @@ export default function ReplyList() {
           console.log("fetch replies response = ", data);
           setReplies(data.repliesResponse);
           setTotalElements(data.totalElements);
+        })
+        .catch((error) => {
+          console.log("fetch and set replies response error = ", error);
+          alert(error.response.data.message);
         });
     };
 
