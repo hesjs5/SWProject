@@ -49,7 +49,10 @@ export default function Header() {
             .catch((error) => {
               console.log("token response error = ", error);
               alert(error.response.data.message);
-              setLogout();
+              localStorage.removeItem("accessToken");
+              localStorage.removeItem("refreshToken");
+              dispatch(myLogout());
+              navigate("/boards");
             });
         })
         .catch((error) => {
@@ -75,22 +78,29 @@ export default function Header() {
 
   const navigate = useNavigate();
   const setLogout = async () => {
-    await customAuthAxios
-      .post(`/logout2`)
+    await axios
+      .post(
+        `${baseURL}/user/logout`,
+        {},
+        {
+          headers: {
+            Authorization: localStorage.getItem("accessToken"),
+          },
+        },
+      )
       .then((response) => {
         if (response.status === 200) {
           console.log("logout 200 status");
+          localStorage.removeItem("accessToken");
+          localStorage.removeItem("refreshToken");
+          dispatch(myLogout());
+          navigate("/boards");
         }
         return response.data;
       })
       .catch((error) => {
         console.log("setLogout response error = ", error);
       });
-
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
-    dispatch(myLogout());
-    navigate("/boards");
   };
 
   const isNotLoggedIn = () => {
