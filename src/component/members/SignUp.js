@@ -1,7 +1,15 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { CardBody, Col, Form, FormLabel, Row } from "react-bootstrap";
+import {
+  Button,
+  CardBody,
+  Col,
+  Form,
+  FormLabel,
+  InputGroup,
+  Row,
+} from "react-bootstrap";
 import { customAxios } from "../../common/CustomAxiosUtils";
 
 export default function Signup() {
@@ -16,10 +24,38 @@ export default function Signup() {
   });
   const [formValues, setFormValues] = useState(initialValues);
   const [allValidate, setAllValidate] = useState(false);
+  const [memberIDStatus, setMemberIDStatus] = useState(false);
+  const [getAuthCodeStatus, setGetAuthCodeStatus] = useState(false);
+  const [authCode, setAuthCode] = useState("");
+  const [authValidate, setAuthValidate] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormValues({ ...formValues, [name]: value });
+  };
+
+  const handleMemberIDChange = (e) => {
+    const { name, value } = e.target;
+    setFormValues({ ...formValues, [name]: value });
+
+    const emailRegEx =
+      /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/i;
+    if (emailRegEx.test(value)) {
+      setMemberIDStatus(true);
+    } else {
+      setMemberIDStatus(false);
+    }
+  };
+
+  const handleAuthCodeChange = (e) => {
+    const { value } = e.target;
+    setAuthCode(value);
+
+    if (value.length >= 6) {
+      setGetAuthCodeStatus(true);
+    } else {
+      setGetAuthCodeStatus(false);
+    }
   };
 
   useEffect(() => {
@@ -31,7 +67,7 @@ export default function Signup() {
 
     const isFormAllValidate =
       regTest && pwCheck && memberNameCheck && memberNicknameCheck;
-    if (isFormAllValidate) {
+    if (isFormAllValidate && authValidate) {
       setAllValidate(true);
       console.log(allValidate);
       return;
@@ -78,6 +114,47 @@ export default function Signup() {
     navigate("/login");
   }
 
+  const getEmailAuthCode = async () => {
+    await customAxios
+      .post(
+        `/emails/verification-requests`,
+        {},
+        {
+          params: {
+            memberID: formValues.memberID,
+          },
+        },
+      )
+      .catch((error) => {
+        console.log("get emailAuthCode error = ", error);
+        alert("인증번호 받기 실패");
+      });
+  };
+
+  const validateEmailAuthCode = async () => {
+    console.log(authCode);
+    await customAxios
+      .post(
+        `/emails/verifications`,
+        {},
+        {
+          params: {
+            memberID: formValues.memberID,
+            authCode: authCode,
+          },
+        },
+      )
+      .then((response) => {
+        setAuthValidate(true);
+        alert(response.data);
+      })
+      .catch((error) => {
+        setAuthValidate(false);
+        console.log("get emailAuthCode error = ", error);
+        alert("인증 오류");
+      });
+  };
+
   return (
     <div className="container" style={{ maxWidth: "560px" }}>
       <div className="pb-5 text-center">
@@ -91,15 +168,49 @@ export default function Signup() {
               이메일
             </FormLabel>
             <Col className="col-sm-10">
-              <Form.Control
-                id="memberID"
-                name="memberID"
-                placeholder="이메일을 입력해주세요."
-                type="email"
-                required
-                value={formValues.memberID}
-                onChange={handleChange}
-              />
+              <InputGroup>
+                <Form.Control
+                  id="memberID"
+                  name="memberID"
+                  placeholder="이메일을 입력해주세요."
+                  type="email"
+                  required
+                  value={formValues.memberID}
+                  onChange={handleMemberIDChange}
+                />
+                <Button
+                  variant="success"
+                  onClick={getEmailAuthCode}
+                  disabled={memberIDStatus === false}
+                >
+                  인증번호 받기
+                </Button>
+              </InputGroup>
+            </Col>
+          </Row>
+          <Row className="mb-3">
+            <FormLabel className="col-sm-2 col-form-label" htmlFor="memberPW">
+              이메일 인증번호
+            </FormLabel>
+            <Col className="col-sm-10">
+              <InputGroup>
+                <Form.Control
+                  id="authCode"
+                  name="authCode"
+                  placeholder="인증번호를 입력해주세요."
+                  type="password"
+                  required
+                  value={authCode}
+                  onChange={handleAuthCodeChange}
+                />
+                <Button
+                  variant="success"
+                  onClick={validateEmailAuthCode}
+                  disabled={getAuthCodeStatus === false}
+                >
+                  인증 확인
+                </Button>
+              </InputGroup>
             </Col>
           </Row>
           <Row className="mb-3">
