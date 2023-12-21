@@ -53,11 +53,23 @@ export default function Login() {
     loginRequest.append("memberPW", formValues.memberPW);
 
     await customAxios
-      .post(`/login`, loginRequest)
+      .post(`/login`, loginRequest, {
+        withCredentials: true,
+      })
       .then((res) => {
         if (res.status === 200) {
-          const token = res.headers["authorization"];
-          localStorage.setItem("token", String(token));
+          // const token = res.headers["authorization"];
+          // localStorage.setItem("token", String(token));
+          // cookies.set("refresh-token", res.headers["refreshtoken"]);
+          const accessToken = res.data.accessToken;
+          localStorage.setItem(
+            "accessToken",
+            "Bearer ".concat(String(accessToken)),
+          );
+
+          const refreshToken = res.data.refreshToken;
+          localStorage.setItem("refreshToken", String(refreshToken));
+
           return res;
         }
       })
@@ -65,7 +77,7 @@ export default function Login() {
         await axios
           .get(`${baseURL}/token`, {
             headers: {
-              Authorization: localStorage.getItem("token"),
+              Authorization: localStorage.getItem("accessToken"),
             },
           })
           .then((response) => response.data)
@@ -103,7 +115,8 @@ export default function Login() {
   };
 
   const setLogout = () => {
-    localStorage.removeItem("token");
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
     dispatch(myLogout());
   };
 

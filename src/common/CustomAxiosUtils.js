@@ -1,7 +1,7 @@
 import axios, {AxiosInstance} from "axios";
 import {baseURL} from "./Constant";
 
-const tokenStorageKey = "token";
+const tokenStorageKey = "accessToken";
 
 const customAxios: AxiosInstance = axios.create({
     baseURL: baseURL,

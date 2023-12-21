@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { customAuthAxios } from "../../common/CustomAxiosUtils";
 import { myLogin, myLogout } from "../../modules/actions";
+import axios from "axios";
+import { baseURL } from "../../common/Constant";
 
 export default function Header() {
   const isLoggedInState = useSelector((state) => state.isLoggedIn);
@@ -11,19 +13,52 @@ export default function Header() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token !== null && token.length > 0) {
+    const accessToken = localStorage.getItem("accessToken");
+    if (accessToken !== null && accessToken.length > 0) {
       customAuthAxios
-        .get(`/token`)
-        .then((response) => response.data)
-        .then((data) => {
-          console.log("response data = ", data);
-          setLogin(data.memberID, data.role);
+        .post(
+          `/reissue`,
+          {},
+          {
+            headers: {
+              "Refresh-Token": localStorage.getItem("refreshToken"),
+            },
+          },
+        )
+        .then((response) => {
+          if (response.status !== 211) {
+            localStorage.setItem(
+              "accessToken",
+              "Bearer ".concat(response.data.accessToken),
+            );
+            localStorage.setItem("refreshToken", response.data.refreshToken);
+          }
+          return response.data;
+        })
+        .then(async (res) => {
+          await axios
+            .get(`${baseURL}/token`, {
+              headers: {
+                Authorization: localStorage.getItem("accessToken"),
+              },
+            })
+            .then((response) => response.data)
+            .then((data) => {
+              setLogin(data.memberID, data.role);
+            })
+            .catch((error) => {
+              console.log("token response error = ", error);
+              alert(error.response.data.message);
+              setLogout();
+            });
         })
         .catch((error) => {
-          console.log("toke response error = ", error);
+          console.log("reissue response error = ", error);
           alert(error.response.data.message);
-          setLogout();
+          localStorage.removeItem("accessToken");
+          localStorage.removeItem("refreshToken");
+          dispatch(myLogout());
+          navigate("/boards");
         });
     }
   }, []); // 처음 한번만 실행 됨
@@ -39,8 +74,21 @@ export default function Header() {
   };
 
   const navigate = useNavigate();
-  const setLogout = () => {
-    localStorage.removeItem("token");
+  const setLogout = async () => {
+    await customAuthAxios
+      .post(`/logout2`)
+      .then((response) => {
+        if (response.status === 200) {
+          console.log("logout 200 status");
+        }
+        return response.data;
+      })
+      .catch((error) => {
+        console.log("setLogout response error = ", error);
+      });
+
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
     dispatch(myLogout());
     navigate("/boards");
   };
@@ -69,9 +117,7 @@ export default function Header() {
   const adminComponent = () => {
     return (
       <Nav>
-        <Nav.Link as={Link} to="/adminPage">
-          Admin page
-        </Nav.Link>
+        <Nav.Link disabled>Admin</Nav.Link>
         <Nav.Link onClick={setLogout}>Sign out</Nav.Link>
       </Nav>
     );
@@ -80,9 +126,7 @@ export default function Header() {
   const loggedInComponent = () => {
     return (
       <Nav>
-        <Nav.Link as={Link} to="/myPage">
-          My page
-        </Nav.Link>
+        <Nav.Link disabled>User</Nav.Link>
         <Nav.Link onClick={setLogout}>Sign out</Nav.Link>
       </Nav>
     );
